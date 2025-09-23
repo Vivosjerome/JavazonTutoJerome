@@ -153,7 +153,7 @@ h1 {
 }
 
 .movie-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-20px);
     box-shadow: 0 10px 20px var(--shadow-strong);
 }
 
@@ -346,3 +346,4 @@ h1 {
         font-size: 0.9em;
     }
 }
+
