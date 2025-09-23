@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cinéma | Films & Genres</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <h1>CinéJéjé</h1>
+    <div class="search-container">
+      <button id="homeButton">Accueil</button>
+      <input type="text" id="searchInput" placeholder="Rechercher un film...">
+    </div>
+  </header>
+
+  <div class="main-content-wrapper">
+    <aside id="genre-menu">
+      <h2>Genres</h2>
+      <ul id="genre-list">
+        <li data-genre-id="28">Action</li>
+        <li data-genre-id="35">Comédie</li>
+        <li data-genre-id="27">Horreur</li>
+        <li data-genre-id="12">Aventure</li>
+        <li data-genre-id="878">SF</li>
+        <li data-genre-id="14">Fantastique</li>
+        <li data-genre-id="53">Thriller</li>
+        <li data-genre-id="10752">Guerre</li>
+        <li data-genre-id="10749">Romance</li>
+      </ul>
+    </aside>
+    <main id="movies-container"></main>
+  </div>
+
+  <div class="pagination-buttons">
+    <button id="prevButton">Précédent</button>
+    <button id="nextButton">Suivant</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
