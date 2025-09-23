@@ -136,6 +136,7 @@ h1 {
     flex-grow: 1;
     transition: opacity 0.5s ease-in-out;
     min-height: 800px;
+    overflow: hidden; /* Déplacez le overflow ici */
 }
 
 /* --- Movie Card Styling --- */
@@ -146,15 +147,17 @@ h1 {
     overflow: hidden;
     text-align: center;
     padding-bottom: 15px;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    /* La transition gère l'animation sur toutes les propriétés en 0.5s */
+    transition: transform 0.2s ease-in-out, box-shadow 0.5s ease-in-out, background-color 0.5s ease-in-out; 
     display: flex;
     flex-direction: column;
     min-height: 450px;
 }
 
 .movie-card:hover {
-    transform: translateY(-20px);
+    transform: translateY(-10px);
     box-shadow: 0 10px 20px var(--shadow-strong);
+    background-color: #ebebeb;
 }
 
 .movie-card img {
