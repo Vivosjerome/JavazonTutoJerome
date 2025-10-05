@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Javazon Lightning — Guide complet (du Niveau 45 au Endgame)</title>
+    <style>
+        :root {
+            --bg: #0f1724;
+            --card: #0b1220;
+            --muted: #94a3b8;
+            --accent: #f59e0b
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial
+        }
+
+        body {
+            background: linear-gradient(180deg, #071028 0%, #081225 100%);
+            color: #e6eef8;
+            padding: 24px
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto
+        }
+
+        header {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 20px
+        }
+
+        header img {
+            width: 64px;
+            height: 64px;
+            /* border-radius: 10px; */
+            object-fit: cover
+        }
+
+        h1 {
+            font-size: 22px;
+            margin: 0
+        }
+
+        p.lead {
+            color: var(--muted);
+            margin: 4px 0 0
+        }
+
+        .grid {
+            display: grid;
+            /* Changement ici : une seule colonne pour main */
+            grid-template-columns: 1fr; 
+            gap: 18px
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6)
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px
+        }
+
+        .items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px
+        }
+
+        .item {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+            padding: 12px;
+            border-radius: 10px
+        }
+
+        .item h4 {
+            margin: 0 0 6px;
+            font-size: 15px
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .badge {
+            display: inline-block;
+            background: #081226;
+            padding: 6px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--muted);
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer
+        }
+
+        button.primary {
+            background: var(--accent);
+            border: none;
+            color: #071022
+        }
+
+        pre {
+            background: #061424;
+            padding: 10px;
+            border-radius: 8px;
+            overflow: auto;
+            color: #dfefff
+        }
+
+        footer {
+            color: var(--muted);
+            margin-top: 14px;
+            font-size: 13px
+        }
+
+        /* Styles pour le conteneur et l'image */
+        .img-thumb-container {
+            position: relative;
+            width: 150px;
+            /* Conserve la taille de base */
+            height: 150px;
+            margin-right: 10px;
+        }
+
+        .img-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* La transition DOIT rester ici pour que le zoom soit fluide */
+            transition: transform 0.2s ease-in-out;
+
+        }
+
+        /* NOUVEAU : On applique le zoom quand on survole le CONTENEUR */
+        .img-thumb-container:hover .img-thumb {
+            transform: scale(8);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        /* Ancienne règle (maintenant supprimée/commentée dans votre code) :
+.img-thumb:hover { ... } 
+*/
+
+        .row {
+            display: flex;
+            align-items: center
+        }
+
+        .chance {
+            font-weight: 700;
+            color: #ffdba3
+        }
+
+        details {
+            margin-top: 8px
+        }
+
+        summary {
+            cursor: pointer
+        }
+
+        .download {
+            display: inline-block;
+            margin-top: 12px
+        }
+
+        /* Le media query n'est plus strictement nécessaire pour le grid à 1 colonne,
+           mais on le garde pour d'autres éventuels ajustements de responsive. */
+        @media (max-width:920px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <img src="https://www.purediablo.com/wp-content/uploads/2020/01/Diablo-2-Amazon.jpg" alt="logo javazon" />
+            <div>
+                <h1>Javazon Lightning — Guide complet (du Niveau 45 → à la fin du jeu)</h1>
+                <p class="lead">Page one-shot prête à être poussée sur GitHub. Contient paliers, zones de butin,
+                    recettes d'artisanat et estimations de chance de butin.</p>
+            </div>
+        </header>
+
+        <div class="grid">
+            <main>
+                <div class="card">
+                    <div class="section-title">
+                        <h2 style="margin:0">Résumé rapide</h2>
+                        <div class="badge">Progression: Niveau 45 → Fin du jeu</div>
+                    </div>
+                    <p class="muted">Suivre les paliers dans l'ordre, farmer les runes clés via la **Comtesse**, les
+                        **Supercoffres de Kurast Inférieur** et **Travincal**, prioriser la **Vengeance des Titans**,
+                        **Esprit**, **Queue de Rasoir** puis **Infinité** et **Énigme**.</p>
+                </div>
+
+                <section class="card" id="paliers">
+                    <div class="section-title">
+                        <h2>Palier 1 — Niveau 45 → 65</h2>
+                        <div class="muted">But : préparer le **mode Cauchemar** → entrer dans le **mode Enfer**</div>
+                    </div>
+                    <div class="items">
+                        <div class="item" id="p1-titan">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://www.d2trophy.com/wp-content/uploads/2019/04/Titans-200-324x324.png"
+                                        alt="Titan's" />
+                                </div>
+                                <div>
+                                    <h4>Vengeance des Titans (Javelot Unique)</h4>
+                                    <div class="muted">Effets : +2 Compétences Amazone / +2 Compétences Javelot / Vol de
+                                        vie</div>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Mephisto **Mode Cauchemar**, Baal **Mode Cauchemar**. Chance estimée :
+                                <span class="chance">très faible</span> — plusieurs centaines de parcours possibles.
+                            </p>
+                            <details>
+                                <summary>Informations sur l'artisanat / le butin</summary>
+                                <p class="muted">C'est un unique donc non réalisable. Farm Mephisto en boucle (Cauchemar
+                                    → Enfer) et parcours de Baal.</p>
+                            </details>
+                        </div>
+
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://www.d2trophy.com/wp-content/uploads/2019/05/Spirit-Monarch-30-34-Fcr-1.png"
+                                        alt="Spirit" />
+                                </div>
+                                <div>
+                                    <h4>Esprit (Monarque) — Mot Runique</h4>
+                                    <div class="muted">Effets : +2 Compétences, **Récupération Rapide après coup**,
+                                        Mana, Résistances</div>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Artisanat (Tal+Thul+Ort+Amn) — Farm la **Comtesse** pour les runes.
+                                Chance d'obtenir les runes : moyenne (Ort/Amn fréquentes, Tal/Thul moins).</p>
+                        </div>
+
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://www.d2trophy.com/wp-content/uploads/2019/04/TreacheryMP.png"
+                                        alt="Treachery" />
+                                </div>
+                                <div>
+                                    <h4>Trahison (Mot Runique)</h4>
+                                    <div class="muted">Effets : **Vitesse d'Attaque Accrue**, Estompe (résistances)
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Artisanat (Shael+Thul+Lem) — Lem est la rune la plus coûteuse ici
+                                (longues sessions de farm).</p>
+                        </div>
+
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://media.karousell.com/media/photos/products/2023/12/11/nonladder_perfect150ed_razorta_1702309230_f9585222"
+                                        alt="Razortail" />
+                                </div>
+                                <div>
+                                    <h4>Queue de Rasoir (Ceinture)</h4>
+                                    <div class="muted">Effets : 100% Pénétration</div>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Baal **Mode Cauchemar** / Mephisto **Mode Enfer**. Chance : rare —
+                                butin de boss unique.</p>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-title">
+                        <h2>Palier 2 — Niveau 65 → 85</h2>
+                        <div class="muted">But : farm du **mode Enfer**, viser les Mots Runiques de haut niveau</div>
+                    </div>
+                    <div class="items">
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://www.d2trophy.com/wp-content/uploads/2019/04/Titans-200-324x324.png"
+                                        alt="Titan's ethereal" />
+                                </div>
+                                <div>
+                                    <h4>Vengeance des Titans éthérée (amélioration)</h4>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Mephisto **Mode Enfer** / Baal **Mode Enfer** / **Fosses**. Chance :
+                                très faible → beaucoup de *grind* (répétition).</p>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://lh5.googleusercontent.com/proxy/hQJrX-yl9f5QRQEmDFALBMlJsB1FAx5vzTXyR5zCKPk1mxS1YmxonhH9_H2xShqSVyownztyb0w7JZiO9EeO5UclFFsWfP6i2lDPB5-ULf3Atod3OLU70iH6a_4t848"
+                                        alt="Chains of Honor" />
+                                </div>
+                                <div>
+                                    <h4>Chaînes d'Honneur (Mot Runique)</h4>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Artisanat (Dol+Um+Ber+Ist). **Ber** et **Um** sont rares ; utiliser
+                                les **Supercoffres de Kurast Inférieur** / **Travincal** pour les runes.</p>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT32bTd4kHTQnr2qU9GIyh9exgst0PIBpBTg&s"
+                                        alt="Griffon's Eye" />
+                                </div>
+                                <div>
+                                    <h4>Œil de Griffon</h4>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Butin de boss en **Mode Enfer** (Mephisto / Baal / Pindle). Chance :
+                                très basse.</p>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR89OGpQXI77rAeLLasdf-MsKx0FwGxsm1WQQ&s"
+                                        alt="Highlord's Wrath" />
+                                </div>
+                                <div>
+                                    <h4>Colère du Grand Seigneur (Amulette)</h4>
+                                </div>
+                            </div>
+                            <p class="muted">Où : Diablo / Baal / butin de la fin du jeu. Chance : rare.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-title">
+                        <h2>Palier 3 — Fin du jeu (Niveau 85+)</h2>
+                        <div class="muted">But : farm absolu — **Infinité**, **Énigme**, **Phénix**</div>
+                    </div>
+                    <div class="items">
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb" src="https://www.vhpg.com/t/d2r-infinity-runeword.png"
+                                        alt="Infinity" />
+                                </div>
+                                <div>
+                                    <h4>Infinité (Mot Runique — Arme du Mercenaire)</h4>
+                                </div>
+                            </div>
+                            <p class="muted">Runes: Ber + Mal + Ber + Ist. Où farm : **Supercoffres de Kurast
+                                Inférieur**, Travincal, Chaos. Chance : très faible (les Supercoffres augmentent la
+                                probabilité).</p>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaxrfJvOOJdfmZgIPBkYYf9TfFwtzrrI0jag&s"
+                                        alt="Enigma" />
+                                </div>
+                                <div>
+                                    <h4>Énigme (Mot Runique)</h4>
+                                </div>
+                            </div>
+                            <p class="muted">Runes: Jah + Ith + Ber. Où farm : Kurast Inférieur / Travincal / Chaos.
+                                Chance : extrêmement faible (Jah + Ber très rares).</p>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <div class="img-thumb-container">
+                                    <img class="img-thumb" src="https://www.vhpg.com/t/d2r-phoenix-runeword.png"
+                                        alt="Phoenix" />
+                                </div>
+                                <div>
+                                    <h4>Phénix (Mot Runique)</h4>
+                                </div>
+                            </div>
+                            <p class="muted">Runes: Vex + Vex + Lo + Jah. Où : boss du mode Enfer + Kurast Inférieur.
+                                Chance : extrêmement faible.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-title">
+                        <h2>Roadmap d'obtention (ordre conseillé)</h2>
+                        <div class="muted">Suivre cet ordre pour limiter le temps perdu</div>
+                    </div>
+                    <ol class="muted">
+                        <li>**Comtesse en Mode Cauchemar** → **Esprit**, **Trahison**, **Tradition** (si nécessaire) et
+                            runes de base.</li>
+                        <li>Mephisto en Mode Cauchemar → Vengeance des Titans, Couronne du Paysan, Queue de Rasoir.</li>
+                        <li>Baal en Mode Cauchemar → Expérience + Vengeance des Titans + équipement.</li>
+                        <li>**Comtesse en Mode Enfer** → farm les runes **Ist**.</li>
+                        <li>Fosses en Mode Enfer / Vaches en Mode Enfer → Uniques et bases.</li>
+                        <li>**Supercoffres de Kurast Inférieur** → farm les runes Vex, Jah, Ber.</li>
+                        <li>Artisanat d'Infinité → priorité si possible (pour le Mercenaire).</li>
+                        <li>Artisanat d'Énigme / Phénix → finaliser l'équipement.</li>
+                    </ol>
+                </section>
+
+            </main>
+
+            </div>
+
+        <footer>Besoin d'ajouts (tableau Découverte Magique exact, images officielles, export Markdown) ? Dis-moi ce que
+            tu veux que j'ajoute.</footer>
+    </div>
+
+    <script>
+        const roadmap = `1) Comtesse en Mode Cauchemar -> Esprit / Trahison / Tradition / runes de base\n2) Mephisto en Mode Cauchemar -> Vengeance des Titans, Couronne du Paysan, Queue de Rasoir\n3) Baal en Mode Cauchemar -> Expérience + Vengeance des Titans + équipement\n4) Comtesse en Mode Enfer -> farm les runes Ist\n5) Fosses en Mode Enfer / Vaches en Mode Enfer -> Uniques et bases\n6) Supercoffres de Kurast Inférieur -> farm les runes Vex/Jah/Ber\n7) Artisanat d'Infinité -> priorité si possible\n8) Artisanat d'Énigme / Phénix -> finaliser l'équipement`;
+
+        // Note: Les boutons "Copier feuille de route" et "Télécharger HTML"
+        // ainsi que la prévisualisation HTML ne sont plus visibles dans le HTML,
+        // mais le JavaScript associé est maintenu au cas où vous décideriez
+        // de réintégrer ces fonctionnalités ou des éléments similaires à l'avenir.
+        // Ils n'auront pas d'effet sur la page actuelle sans leurs éléments HTML.
+
+        document.getElementById('copyRoad')?.addEventListener('click', () => {
+            navigator.clipboard.writeText(roadmap).then(() => {
+                alert('Feuille de route copiée dans le presse-papiers');
+            });
+        });
+
+        document.getElementById('downloadBtn')?.addEventListener('click', () => {
+            const html = document.documentElement.outerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'Javazon_Lightning_Guide.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        });
+
+        const preview = document.getElementById('htmlPreview');
+        if (preview) {
+            preview.textContent = '';
+        }
+    </script>
+</body>
+
+</html>
