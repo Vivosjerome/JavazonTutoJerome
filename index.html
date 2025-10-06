@@ -10,7 +10,11 @@
             --bg: #0f1724;
             --card: #0b1220;
             --muted: #94a3b8;
-            --accent: #f59e0b
+            --accent: #f59e0b;
+            --completed-bg: rgba(239, 68, 68, 0.1);
+            --completed-border: rgba(239, 68, 68, 0.3);
+            --completed-text: #ffbdbd;
+            --checked-color: #ef4444;
         }
 
         html,
@@ -57,8 +61,7 @@
 
         .grid {
             display: grid;
-            /* Changement ici : une seule colonne pour main */
-            grid-template-columns: 1fr; 
+            grid-template-columns: 1fr;
             gap: 18px
         }
 
@@ -85,11 +88,15 @@
         .item {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
             padding: 12px;
-            border-radius: 10px
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+            /* Ajout pour l'effet de couleur */
+            border: 1px solid transparent;
         }
 
         .item h4 {
-            margin: 0 0 6px;
+            margin: 0;
+            /* Rétabli */
             font-size: 15px
         }
 
@@ -141,25 +148,31 @@
             font-size: 13px
         }
 
-        /* Styles pour le conteneur et l'image */
+        /* Styles pour l'image */
         .img-thumb-container {
             position: relative;
-            width: 150px;
-            /* Conserve la taille de base */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .img-thumb {
+            max-width: 100%;
+            max-height: 100px; /* Taille réduite pour une meilleure mise en page */
+            object-fit: contain;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* NOUVEAU : Zoom de l'image au survol */
+        .img-thumb-container {
+            width: 150px; /* Conserve la taille de base */
             height: 150px;
             margin-right: 10px;
         }
 
-        .img-thumb {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            /* La transition DOIT rester ici pour que le zoom soit fluide */
-            transition: transform 0.2s ease-in-out;
-
-        }
-
-        /* NOUVEAU : On applique le zoom quand on survole le CONTENEUR */
         .img-thumb-container:hover .img-thumb {
             transform: scale(8);
             position: absolute;
@@ -168,13 +181,10 @@
             z-index: 10;
         }
 
-        /* Ancienne règle (maintenant supprimée/commentée dans votre code) :
-.img-thumb:hover { ... } 
-*/
-
         .row {
             display: flex;
-            align-items: center
+            align-items: flex-start; /* Alignement en haut pour le texte */
+            margin-bottom: 8px;
         }
 
         .chance {
@@ -195,8 +205,74 @@
             margin-top: 12px
         }
 
-        /* Le media query n'est plus strictement nécessaire pour le grid à 1 colonne,
-           mais on le garde pour d'autres éventuels ajustements de responsive. */
+
+        /* NOUVEAUX STYLES DE CHECKBOX ET DE PROGRESSION (ROUGE) */
+        
+        /* Conteneur pour le titre et la checkbox (pour l'alignement) */
+        .item-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        /* Le label cliquable pour la checkbox */
+        .item-control {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            font-size: 13px;
+            color: var(--muted);
+            white-space: nowrap; /* Empêche le texte de la checkbox de sauter à la ligne */
+        }
+
+        /* Cache la checkbox native */
+        .item-control input[type="checkbox"] {
+            display: none;
+        }
+
+        /* L'indicateur visuel (le petit carré) */
+        .item-control .indicator {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--muted);
+            border-radius: 4px;
+            transition: all 0.2s;
+            background-color: transparent;
+            font-size: 10px;
+            color: transparent;
+            margin-left: 8px; /* Espace à gauche du carré (à droite du texte "Terminé") */
+        }
+
+        /* 1. Règle principale: La carte est complétée */
+        .item.completed {
+            background: linear-gradient(180deg, var(--completed-bg), rgba(239, 68, 68, 0.05));
+            border: 1px solid var(--completed-border);
+        }
+
+        /* 2. Style du texte intérieur de la carte complétée */
+        .item.completed h4 {
+            color: var(--completed-text);
+        }
+
+        /* 3. Style de la checkbox quand elle est cochée */
+        .item.completed .item-control .indicator {
+            background-color: var(--checked-color);
+            border-color: var(--checked-color);
+            color: white;
+        }
+
+        /* 4. Affichage du coche */
+        .item.completed .item-control .indicator::after {
+            content: '✔';
+        }
+
+
         @media (max-width:920px) {
             .grid {
                 grid-template-columns: 1fr
@@ -235,6 +311,14 @@
                     </div>
                     <div class="items">
                         <div class="item" id="p1-titan">
+                            <div class="item-header-row">
+                                <h4>Vengeance des Titans (Javelot Unique)</h4>
+                                <label for="status-p1-titan" class="item-control">
+                                    <input type="checkbox" id="status-p1-titan" data-item-id="p1-titan" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -242,7 +326,6 @@
                                         alt="Titan's" />
                                 </div>
                                 <div>
-                                    <h4>Vengeance des Titans (Javelot Unique)</h4>
                                     <div class="muted">Effets : +2 Compétences Amazone / +2 Compétences Javelot / Vol de
                                         vie</div>
                                 </div>
@@ -257,7 +340,15 @@
                             </details>
                         </div>
 
-                        <div class="item">
+                        <div class="item" id="p1-spirit">
+                            <div class="item-header-row">
+                                <h4>Esprit (Monarque) — Mot Runique</h4>
+                                <label for="status-p1-spirit" class="item-control">
+                                    <input type="checkbox" id="status-p1-spirit" data-item-id="p1-spirit" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -265,7 +356,6 @@
                                         alt="Spirit" />
                                 </div>
                                 <div>
-                                    <h4>Esprit (Monarque) — Mot Runique</h4>
                                     <div class="muted">Effets : +2 Compétences, **Récupération Rapide après coup**,
                                         Mana, Résistances</div>
                                 </div>
@@ -274,7 +364,15 @@
                                 Chance d'obtenir les runes : moyenne (Ort/Amn fréquentes, Tal/Thul moins).</p>
                         </div>
 
-                        <div class="item">
+                        <div class="item" id="p1-treachery">
+                            <div class="item-header-row">
+                                <h4>Trahison (Mot Runique)</h4>
+                                <label for="status-p1-treachery" class="item-control">
+                                    <input type="checkbox" id="status-p1-treachery" data-item-id="p1-treachery" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -282,7 +380,6 @@
                                         alt="Treachery" />
                                 </div>
                                 <div>
-                                    <h4>Trahison (Mot Runique)</h4>
                                     <div class="muted">Effets : **Vitesse d'Attaque Accrue**, Estompe (résistances)
                                     </div>
                                 </div>
@@ -291,7 +388,15 @@
                                 (longues sessions de farm).</p>
                         </div>
 
-                        <div class="item">
+                        <div class="item" id="p1-razortail">
+                            <div class="item-header-row">
+                                <h4>Queue de Rasoir (Ceinture)</h4>
+                                <label for="status-p1-razortail" class="item-control">
+                                    <input type="checkbox" id="status-p1-razortail" data-item-id="p1-razortail" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -299,7 +404,6 @@
                                         alt="Razortail" />
                                 </div>
                                 <div>
-                                    <h4>Queue de Rasoir (Ceinture)</h4>
                                     <div class="muted">Effets : 100% Pénétration</div>
                                 </div>
                             </div>
@@ -316,7 +420,15 @@
                         <div class="muted">But : farm du **mode Enfer**, viser les Mots Runiques de haut niveau</div>
                     </div>
                     <div class="items">
-                        <div class="item">
+                        <div class="item" id="p2-titaneth">
+                            <div class="item-header-row">
+                                <h4>Vengeance des Titans éthérée (amélioration)</h4>
+                                <label for="status-p2-titaneth" class="item-control">
+                                    <input type="checkbox" id="status-p2-titaneth" data-item-id="p2-titaneth" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -324,13 +436,20 @@
                                         alt="Titan's ethereal" />
                                 </div>
                                 <div>
-                                    <h4>Vengeance des Titans éthérée (amélioration)</h4>
-                                </div>
+                                    </div>
                             </div>
                             <p class="muted">Où : Mephisto **Mode Enfer** / Baal **Mode Enfer** / **Fosses**. Chance :
                                 très faible → beaucoup de *grind* (répétition).</p>
                         </div>
-                        <div class="item">
+                        <div class="item" id="p2-coh">
+                            <div class="item-header-row">
+                                <h4>Chaînes d'Honneur (Mot Runique)</h4>
+                                <label for="status-p2-coh" class="item-control">
+                                    <input type="checkbox" id="status-p2-coh" data-item-id="p2-coh" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -338,13 +457,20 @@
                                         alt="Chains of Honor" />
                                 </div>
                                 <div>
-                                    <h4>Chaînes d'Honneur (Mot Runique)</h4>
-                                </div>
+                                    </div>
                             </div>
                             <p class="muted">Où : Artisanat (Dol+Um+Ber+Ist). **Ber** et **Um** sont rares ; utiliser
                                 les **Supercoffres de Kurast Inférieur** / **Travincal** pour les runes.</p>
                         </div>
-                        <div class="item">
+                        <div class="item" id="p2-griffon">
+                            <div class="item-header-row">
+                                <h4>Œil de Griffon</h4>
+                                <label for="status-p2-griffon" class="item-control">
+                                    <input type="checkbox" id="status-p2-griffon" data-item-id="p2-griffon" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -352,13 +478,20 @@
                                         alt="Griffon's Eye" />
                                 </div>
                                 <div>
-                                    <h4>Œil de Griffon</h4>
-                                </div>
+                                    </div>
                             </div>
                             <p class="muted">Où : Butin de boss en **Mode Enfer** (Mephisto / Baal / Pindle). Chance :
                                 très basse.</p>
                         </div>
-                        <div class="item">
+                        <div class="item" id="p2-highlord">
+                            <div class="item-header-row">
+                                <h4>Colère du Grand Seigneur (Amulette)</h4>
+                                <label for="status-p2-highlord" class="item-control">
+                                    <input type="checkbox" id="status-p2-highlord" data-item-id="p2-highlord" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -366,8 +499,7 @@
                                         alt="Highlord's Wrath" />
                                 </div>
                                 <div>
-                                    <h4>Colère du Grand Seigneur (Amulette)</h4>
-                                </div>
+                                    </div>
                             </div>
                             <p class="muted">Où : Diablo / Baal / butin de la fin du jeu. Chance : rare.</p>
                         </div>
@@ -380,21 +512,36 @@
                         <div class="muted">But : farm absolu — **Infinité**, **Énigme**, **Phénix**</div>
                     </div>
                     <div class="items">
-                        <div class="item">
+                        <div class="item" id="p3-infinity">
+                            <div class="item-header-row">
+                                <h4>Infinité (Mot Runique — Arme du Mercenaire)</h4>
+                                <label for="status-p3-infinity" class="item-control">
+                                    <input type="checkbox" id="status-p3-infinity" data-item-id="p3-infinity" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb" src="https://www.vhpg.com/t/d2r-infinity-runeword.png"
                                         alt="Infinity" />
                                 </div>
                                 <div>
-                                    <h4>Infinité (Mot Runique — Arme du Mercenaire)</h4>
-                                </div>
+                                    </div>
                             </div>
                             <p class="muted">Runes: Ber + Mal + Ber + Ist. Où farm : **Supercoffres de Kurast
                                 Inférieur**, Travincal, Chaos. Chance : très faible (les Supercoffres augmentent la
                                 probabilité).</p>
                         </div>
-                        <div class="item">
+                        <div class="item" id="p3-enigma">
+                            <div class="item-header-row">
+                                <h4>Énigme (Mot Runique)</h4>
+                                <label for="status-p3-enigma" class="item-control">
+                                    <input type="checkbox" id="status-p3-enigma" data-item-id="p3-enigma" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb"
@@ -402,21 +549,27 @@
                                         alt="Enigma" />
                                 </div>
                                 <div>
-                                    <h4>Énigme (Mot Runique)</h4>
-                                </div>
+                                    </div>
                             </div>
                             <p class="muted">Runes: Jah + Ith + Ber. Où farm : Kurast Inférieur / Travincal / Chaos.
                                 Chance : extrêmement faible (Jah + Ber très rares).</p>
                         </div>
-                        <div class="item">
+                        <div class="item" id="p3-phoenix">
+                            <div class="item-header-row">
+                                <h4>Phénix (Mot Runique)</h4>
+                                <label for="status-p3-phoenix" class="item-control">
+                                    <input type="checkbox" id="status-p3-phoenix" data-item-id="p3-phoenix" />
+                                    Terminé
+                                    <span class="indicator"></span>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="img-thumb-container">
                                     <img class="img-thumb" src="https://www.vhpg.com/t/d2r-phoenix-runeword.png"
                                         alt="Phoenix" />
                                 </div>
                                 <div>
-                                    <h4>Phénix (Mot Runique)</h4>
-                                </div>
+                                    </div>
                             </div>
                             <p class="muted">Runes: Vex + Vex + Lo + Jah. Où : boss du mode Enfer + Kurast Inférieur.
                                 Chance : extrêmement faible.</p>
@@ -444,20 +597,15 @@
 
             </main>
 
-            </div>
+        </div>
 
         <footer>Besoin d'ajouts (tableau Découverte Magique exact, images officielles, export Markdown) ? Dis-moi ce que
             tu veux que j'ajoute.</footer>
     </div>
 
     <script>
+        // Fonctionnalités existantes (copie, téléchargement)
         const roadmap = `1) Comtesse en Mode Cauchemar -> Esprit / Trahison / Tradition / runes de base\n2) Mephisto en Mode Cauchemar -> Vengeance des Titans, Couronne du Paysan, Queue de Rasoir\n3) Baal en Mode Cauchemar -> Expérience + Vengeance des Titans + équipement\n4) Comtesse en Mode Enfer -> farm les runes Ist\n5) Fosses en Mode Enfer / Vaches en Mode Enfer -> Uniques et bases\n6) Supercoffres de Kurast Inférieur -> farm les runes Vex/Jah/Ber\n7) Artisanat d'Infinité -> priorité si possible\n8) Artisanat d'Énigme / Phénix -> finaliser l'équipement`;
-
-        // Note: Les boutons "Copier feuille de route" et "Télécharger HTML"
-        // ainsi que la prévisualisation HTML ne sont plus visibles dans le HTML,
-        // mais le JavaScript associé est maintenu au cas où vous décideriez
-        // de réintégrer ces fonctionnalités ou des éléments similaires à l'avenir.
-        // Ils n'auront pas d'effet sur la page actuelle sans leurs éléments HTML.
 
         document.getElementById('copyRoad')?.addEventListener('click', () => {
             navigator.clipboard.writeText(roadmap).then(() => {
@@ -467,10 +615,13 @@
 
         document.getElementById('downloadBtn')?.addEventListener('click', () => {
             const html = document.documentElement.outerHTML;
-            const blob = new Blob([html], { type: 'text/html' });
+            const blob = new Blob([html], {
+                type: 'text/html'
+            });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = 'Javazon_Lightning_Guide.html';
+            a.href = url;
+            a.download = 'Javazon_Lightning_Guide.html';
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -481,6 +632,46 @@
         if (preview) {
             preview.textContent = '';
         }
+
+        // LOGIQUE DE SAUVEGARDE ET DE COULEUR (LocalStorage)
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.item-control input[type="checkbox"]');
+
+            // 1. CHARGER l'état sauvegardé
+            checkboxes.forEach(checkbox => {
+                const itemId = checkbox.getAttribute('data-item-id');
+                const storageKey = `status-${itemId}`;
+                const itemElement = document.getElementById(itemId);
+
+                if (localStorage.getItem(storageKey) === 'checked') {
+                    checkbox.checked = true;
+                    if (itemElement) {
+                        itemElement.classList.add('completed');
+                    }
+                }
+            });
+
+            // 2. SAUVEGARDER l'état au changement
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const itemId = this.getAttribute('data-item-id');
+                    const storageKey = `status-${itemId}`;
+                    const itemElement = document.getElementById(itemId);
+
+                    if (this.checked) {
+                        localStorage.setItem(storageKey, 'checked');
+                        if (itemElement) {
+                            itemElement.classList.add('completed');
+                        }
+                    } else {
+                        localStorage.removeItem(storageKey);
+                        if (itemElement) {
+                            itemElement.classList.remove('completed');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 
