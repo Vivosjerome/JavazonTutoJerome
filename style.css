@@ -1,0 +1,170 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 20px;
+}
+
+h1,
+h2 {
+    color: #ffcc00;
+    text-align: center;
+    border-bottom: 2px solid #5a5a5a;
+    padding-bottom: 10px;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #5a5a5a;
+}
+
+/* Styles pour le menu des Actes */
+#act-menu {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.act-btn {
+    background-color: #5a5a5a;
+    color: #fff;
+    border: 1px solid #ffcc00;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.act-btn:hover {
+    background-color: #7a7a7a;
+    border-color: #fff;
+}
+
+ol {
+    list-style: none;
+    padding-left: 0;
+    margin: 20px 100px;
+}
+
+li {
+    padding: 10px 0;
+    border-bottom: 1px dashed #4a4a4a;
+    line-height: 1.5;
+    /* white-space: nowrap; */
+
+}
+
+label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    cursor: pointer;
+    transition: color 0.3s;
+    padding-left: 10px;
+}
+
+/* Case à cocher */
+.step-checkbox {
+    margin-right: 10px;
+    cursor: pointer;
+    transform: scale(1.2);
+    /* Rendre la case un peu plus visible */
+}
+
+/* Règles pour masquer/afficher les Actes (important pour le JavaScript) */
+.act-content {
+    display: none;
+    /* Cache tous les actes par défaut */
+}
+
+/* Affiche l'Acte 1 par défaut (sera géré par JS après le chargement) */
+#act-1-content {
+    display: block;
+}
+
+.hidden-step {
+    display: none !important;
+    /* Force le masquage */
+}
+
+.completed-step label {
+    color: #6a6a6a !important;
+    text-decoration: line-through;
+}
+
+
+.completed-step span {
+    color: #6a6a6a !important;
+    text-decoration: line-through;
+}
+
+
+.act-btn.completed-act {
+    background-color: #3a3a3a;
+    /* Un fond plus sombre */
+    color: #7a7a7a;
+    /* Texte grisé */
+    border-color: #4a4a4a;
+    /* Bordure discrète */
+    cursor: default;
+    /* Montre que le travail est terminé */
+}
+
+.act-btn.completed-act:hover {
+    background-color: #3a3a3a;
+    /* Pas de changement de couleur au survol */
+    border-color: #4a4a4a;
+}
+
+/* --- Dans le fichier style.css --- */
+
+/* Applique une petite marge horizontale (gauche et droite) à toutes les balises de couleur */
+.Red,
+.White,
+.Blue,
+.pnj,
+.Green {
+    white-space: nowrap;
+    /* Conserver la règle pour éviter la coupure de mots */
+    margin-left: 4px;
+    /* AJOUTEZ CECI : Espacement à gauche */
+    margin-right: 4px;
+    /* AJOUTEZ CECI : Espacement à droite */
+}
+
+/* Styles de couleur pour les éléments spécifiques du jeu (pour la lisibilité) */
+.Red {
+    color: #ff5555;
+    /* Boss / Mob important */
+    font-weight: bold;
+}
+
+.White {
+    color: #ffffff;
+    /* Noms de zones */
+    font-style: italic;
+}
+
+.Blue {
+    color: #55aaff;
+    /* Waypoints */
+    font-weight: bold;
+}
+
+.pnj {
+    color: #00ff00;
+    /* PNJ */
+    font-weight: bold;
+}
+
+.Green {
+    color: #00cc00;
+    /* Récompenses / Objets de quête */
+    font-style: italic;
+}

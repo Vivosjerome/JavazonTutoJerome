@@ -1,678 +1,2277 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Javazon Lightning — Guide complet (du Niveau 45 au Endgame)</title>
-    <style>
-        :root {
-            --bg: #0f1724;
-            --card: #0b1220;
-            --muted: #94a3b8;
-            --accent: #f59e0b;
-            --completed-bg: rgba(239, 68, 68, 0.1);
-            --completed-border: rgba(239, 68, 68, 0.3);
-            --completed-text: #ffbdbd;
-            --checked-color: #ef4444;
-        }
-
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial
-        }
-
-        body {
-            background: linear-gradient(180deg, #071028 0%, #081225 100%);
-            color: #e6eef8;
-            padding: 24px
-        }
-
-        .wrap {
-            max-width: 1100px;
-            margin: 0 auto
-        }
-
-        header {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            margin-bottom: 20px
-        }
-
-        header img {
-            width: 64px;
-            height: 64px;
-            /* border-radius: 10px; */
-            object-fit: cover
-        }
-
-        h1 {
-            font-size: 22px;
-            margin: 0
-        }
-
-        p.lead {
-            color: var(--muted);
-            margin: 4px 0 0
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 18px
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6)
-        }
-
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px
-        }
-
-        .items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px
-        }
-
-        .item {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
-            padding: 12px;
-            border-radius: 10px;
-            transition: all 0.2s ease-in-out;
-            /* Ajout pour l'effet de couleur */
-            border: 1px solid transparent;
-        }
-
-        .item h4 {
-            margin: 0;
-            /* Rétabli */
-            font-size: 15px
-        }
-
-        .muted {
-            color: var(--muted);
-            font-size: 13px
-        }
-
-        .badge {
-            display: inline-block;
-            background: #081226;
-            padding: 6px 8px;
-            border-radius: 999px;
-            font-size: 12px;
-            color: var(--muted)
-        }
-
-        .controls {
-            display: flex;
-            gap: 8px
-        }
-
-        button {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: var(--muted);
-            padding: 8px 10px;
-            border-radius: 8px;
-            cursor: pointer
-        }
-
-        button.primary {
-            background: var(--accent);
-            border: none;
-            color: #071022
-        }
-
-        pre {
-            background: #061424;
-            padding: 10px;
-            border-radius: 8px;
-            overflow: auto;
-            color: #dfefff
-        }
-
-        footer {
-            color: var(--muted);
-            margin-top: 14px;
-            font-size: 13px
-        }
-
-        /* Styles pour l'image */
-        .img-thumb-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 0;
-        }
-
-        .img-thumb {
-            max-width: 100%;
-            max-height: 100px; /* Taille réduite pour une meilleure mise en page */
-            object-fit: contain;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        /* NOUVEAU : Zoom de l'image au survol */
-        .img-thumb-container {
-            width: 150px; /* Conserve la taille de base */
-            height: 150px;
-            margin-right: 10px;
-        }
-
-        .img-thumb-container:hover .img-thumb {
-            transform: scale(8);
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-        }
-
-        .row {
-            display: flex;
-            align-items: flex-start; /* Alignement en haut pour le texte */
-            margin-bottom: 8px;
-        }
-
-        .chance {
-            font-weight: 700;
-            color: #ffdba3
-        }
-
-        details {
-            margin-top: 8px
-        }
-
-        summary {
-            cursor: pointer
-        }
-
-        .download {
-            display: inline-block;
-            margin-top: 12px
-        }
-
-
-        /* NOUVEAUX STYLES DE CHECKBOX ET DE PROGRESSION (ROUGE) */
-        
-        /* Conteneur pour le titre et la checkbox (pour l'alignement) */
-        .item-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-        }
-
-        /* Le label cliquable pour la checkbox */
-        .item-control {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-            font-size: 13px;
-            color: var(--muted);
-            white-space: nowrap; /* Empêche le texte de la checkbox de sauter à la ligne */
-        }
-
-        /* Cache la checkbox native */
-        .item-control input[type="checkbox"] {
-            display: none;
-        }
-
-        /* L'indicateur visuel (le petit carré) */
-        .item-control .indicator {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 16px;
-            height: 16px;
-            border: 1px solid var(--muted);
-            border-radius: 4px;
-            transition: all 0.2s;
-            background-color: transparent;
-            font-size: 10px;
-            color: transparent;
-            margin-left: 8px; /* Espace à gauche du carré (à droite du texte "Terminé") */
-        }
-
-        /* 1. Règle principale: La carte est complétée */
-        .item.completed {
-            background: linear-gradient(180deg, var(--completed-bg), rgba(239, 68, 68, 0.05));
-            border: 1px solid var(--completed-border);
-        }
-
-        /* 2. Style du texte intérieur de la carte complétée */
-        .item.completed h4 {
-            color: var(--completed-text);
-        }
-
-        /* 3. Style de la checkbox quand elle est cochée */
-        .item.completed .item-control .indicator {
-            background-color: var(--checked-color);
-            border-color: var(--checked-color);
-            color: white;
-        }
-
-        /* 4. Affichage du coche */
-        .item.completed .item-control .indicator::after {
-            content: '✔';
-        }
-
-
-        @media (max-width:920px) {
-            .grid {
-                grid-template-columns: 1fr
-            }
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Guide Campagne Path of Exile</title>
 </head>
 
 <body>
-    <div class="wrap">
-        <header>
-            <img src="https://www.purediablo.com/wp-content/uploads/2020/01/Diablo-2-Amazon.jpg" alt="logo javazon" />
-            <div>
-                <h1>Javazon Lightning — Guide complet (du Niveau 45 → à la fin du jeu)</h1>
-                <p class="lead">Page one-shot prête à être poussée sur GitHub. Contient paliers, zones de butin,
-                    recettes d'artisanat et estimations de chance de butin.</p>
-            </div>
-        </header>
-
-        <div class="grid">
-            <main>
-                <div class="card">
-                    <div class="section-title">
-                        <h2 style="margin:0">Résumé rapide</h2>
-                        <div class="badge">Progression: Niveau 45 → Fin du jeu</div>
-                    </div>
-                    <p class="muted">Suivre les paliers dans l'ordre, farmer les runes clés via la **Comtesse**, les
-                        **Supercoffres de Kurast Inférieur** et **Travincal**, prioriser la **Vengeance des Titans**,
-                        **Esprit**, **Queue de Rasoir** puis **Infinité** et **Énigme**.</p>
-                </div>
-
-                <section class="card" id="paliers">
-                    <div class="section-title">
-                        <h2>Palier 1 — Niveau 45 → 65</h2>
-                        <div class="muted">But : préparer le **mode Cauchemar** → entrer dans le **mode Enfer**</div>
-                    </div>
-                    <div class="items">
-                        <div class="item" id="p1-titan">
-                            <div class="item-header-row">
-                                <h4>Vengeance des Titans (Javelot Unique)</h4>
-                                <label for="status-p1-titan" class="item-control">
-                                    <input type="checkbox" id="status-p1-titan" data-item-id="p1-titan" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://www.d2trophy.com/wp-content/uploads/2019/04/Titans-200-324x324.png"
-                                        alt="Titan's" />
-                                </div>
-                                <div>
-                                    <div class="muted">Effets : +2 Compétences Amazone / +2 Compétences Javelot / Vol de
-                                        vie</div>
-                                </div>
-                            </div>
-                            <p class="muted">Où : Mephisto **Mode Cauchemar**, Baal **Mode Cauchemar**. Chance estimée :
-                                <span class="chance">très faible</span> — plusieurs centaines de parcours possibles.
-                            </p>
-                            <details>
-                                <summary>Informations sur l'artisanat / le butin</summary>
-                                <p class="muted">C'est un unique donc non réalisable. Farm Mephisto en boucle (Cauchemar
-                                    → Enfer) et parcours de Baal.</p>
-                            </details>
-                        </div>
-
-                        <div class="item" id="p1-spirit">
-                            <div class="item-header-row">
-                                <h4>Esprit (Monarque) — Mot Runique</h4>
-                                <label for="status-p1-spirit" class="item-control">
-                                    <input type="checkbox" id="status-p1-spirit" data-item-id="p1-spirit" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://www.d2trophy.com/wp-content/uploads/2019/05/Spirit-Monarch-30-34-Fcr-1.png"
-                                        alt="Spirit" />
-                                </div>
-                                <div>
-                                    <div class="muted">Effets : +2 Compétences, **Récupération Rapide après coup**,
-                                        Mana, Résistances</div>
-                                </div>
-                            </div>
-                            <p class="muted">Où : Artisanat (Tal+Thul+Ort+Amn) — Farm la **Comtesse** pour les runes.
-                                Chance d'obtenir les runes : moyenne (Ort/Amn fréquentes, Tal/Thul moins).</p>
-                        </div>
-
-                        <div class="item" id="p1-treachery">
-                            <div class="item-header-row">
-                                <h4>Trahison (Mot Runique)</h4>
-                                <label for="status-p1-treachery" class="item-control">
-                                    <input type="checkbox" id="status-p1-treachery" data-item-id="p1-treachery" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://www.d2trophy.com/wp-content/uploads/2019/04/TreacheryMP.png"
-                                        alt="Treachery" />
-                                </div>
-                                <div>
-                                    <div class="muted">Effets : **Vitesse d'Attaque Accrue**, Estompe (résistances)
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="muted">Où : Artisanat (Shael+Thul+Lem) — Lem est la rune la plus coûteuse ici
-                                (longues sessions de farm).</p>
-                        </div>
-
-                        <div class="item" id="p1-razortail">
-                            <div class="item-header-row">
-                                <h4>Queue de Rasoir (Ceinture)</h4>
-                                <label for="status-p1-razortail" class="item-control">
-                                    <input type="checkbox" id="status-p1-razortail" data-item-id="p1-razortail" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://media.karousell.com/media/photos/products/2023/12/11/nonladder_perfect150ed_razorta_1702309230_f9585222"
-                                        alt="Razortail" />
-                                </div>
-                                <div>
-                                    <div class="muted">Effets : 100% Pénétration</div>
-                                </div>
-                            </div>
-                            <p class="muted">Où : Baal **Mode Cauchemar** / Mephisto **Mode Enfer**. Chance : rare —
-                                butin de boss unique.</p>
-                        </div>
-
-                    </div>
-                </section>
-
-                <section class="card">
-                    <div class="section-title">
-                        <h2>Palier 2 — Niveau 65 → 85</h2>
-                        <div class="muted">But : farm du **mode Enfer**, viser les Mots Runiques de haut niveau</div>
-                    </div>
-                    <div class="items">
-                        <div class="item" id="p2-titaneth">
-                            <div class="item-header-row">
-                                <h4>Vengeance des Titans éthérée (amélioration)</h4>
-                                <label for="status-p2-titaneth" class="item-control">
-                                    <input type="checkbox" id="status-p2-titaneth" data-item-id="p2-titaneth" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://www.d2trophy.com/wp-content/uploads/2019/04/Titans-200-324x324.png"
-                                        alt="Titan's ethereal" />
-                                </div>
-                                <div>
-                                    </div>
-                            </div>
-                            <p class="muted">Où : Mephisto **Mode Enfer** / Baal **Mode Enfer** / **Fosses**. Chance :
-                                très faible → beaucoup de *grind* (répétition).</p>
-                        </div>
-                        <div class="item" id="p2-coh">
-                            <div class="item-header-row">
-                                <h4>Chaînes d'Honneur (Mot Runique)</h4>
-                                <label for="status-p2-coh" class="item-control">
-                                    <input type="checkbox" id="status-p2-coh" data-item-id="p2-coh" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://lh5.googleusercontent.com/proxy/hQJrX-yl9f5QRQEmDFALBMlJsB1FAx5vzTXyR5zCKPk1mxS1YmxonhH9_H2xShqSVyownztyb0w7JZiO9EeO5UclFFsWfP6i2lDPB5-ULf3Atod3OLU70iH6a_4t848"
-                                        alt="Chains of Honor" />
-                                </div>
-                                <div>
-                                    </div>
-                            </div>
-                            <p class="muted">Où : Artisanat (Dol+Um+Ber+Ist). **Ber** et **Um** sont rares ; utiliser
-                                les **Supercoffres de Kurast Inférieur** / **Travincal** pour les runes.</p>
-                        </div>
-                        <div class="item" id="p2-griffon">
-                            <div class="item-header-row">
-                                <h4>Œil de Griffon</h4>
-                                <label for="status-p2-griffon" class="item-control">
-                                    <input type="checkbox" id="status-p2-griffon" data-item-id="p2-griffon" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT32bTd4kHTQnr2qU9GIyh9exgst0PIBpBTg&s"
-                                        alt="Griffon's Eye" />
-                                </div>
-                                <div>
-                                    </div>
-                            </div>
-                            <p class="muted">Où : Butin de boss en **Mode Enfer** (Mephisto / Baal / Pindle). Chance :
-                                très basse.</p>
-                        </div>
-                        <div class="item" id="p2-highlord">
-                            <div class="item-header-row">
-                                <h4>Colère du Grand Seigneur (Amulette)</h4>
-                                <label for="status-p2-highlord" class="item-control">
-                                    <input type="checkbox" id="status-p2-highlord" data-item-id="p2-highlord" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR89OGpQXI77rAeLLasdf-MsKx0FwGxsm1WQQ&s"
-                                        alt="Highlord's Wrath" />
-                                </div>
-                                <div>
-                                    </div>
-                            </div>
-                            <p class="muted">Où : Diablo / Baal / butin de la fin du jeu. Chance : rare.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="card">
-                    <div class="section-title">
-                        <h2>Palier 3 — Fin du jeu (Niveau 85+)</h2>
-                        <div class="muted">But : farm absolu — **Infinité**, **Énigme**, **Phénix**</div>
-                    </div>
-                    <div class="items">
-                        <div class="item" id="p3-infinity">
-                            <div class="item-header-row">
-                                <h4>Infinité (Mot Runique — Arme du Mercenaire)</h4>
-                                <label for="status-p3-infinity" class="item-control">
-                                    <input type="checkbox" id="status-p3-infinity" data-item-id="p3-infinity" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb" src="https://www.vhpg.com/t/d2r-infinity-runeword.png"
-                                        alt="Infinity" />
-                                </div>
-                                <div>
-                                    </div>
-                            </div>
-                            <p class="muted">Runes: Ber + Mal + Ber + Ist. Où farm : **Supercoffres de Kurast
-                                Inférieur**, Travincal, Chaos. Chance : très faible (les Supercoffres augmentent la
-                                probabilité).</p>
-                        </div>
-                        <div class="item" id="p3-enigma">
-                            <div class="item-header-row">
-                                <h4>Énigme (Mot Runique)</h4>
-                                <label for="status-p3-enigma" class="item-control">
-                                    <input type="checkbox" id="status-p3-enigma" data-item-id="p3-enigma" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb"
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaxrfJvOOJdfmZgIPBkYYf9TfFwtzrrI0jag&s"
-                                        alt="Enigma" />
-                                </div>
-                                <div>
-                                    </div>
-                            </div>
-                            <p class="muted">Runes: Jah + Ith + Ber. Où farm : Kurast Inférieur / Travincal / Chaos.
-                                Chance : extrêmement faible (Jah + Ber très rares).</p>
-                        </div>
-                        <div class="item" id="p3-phoenix">
-                            <div class="item-header-row">
-                                <h4>Phénix (Mot Runique)</h4>
-                                <label for="status-p3-phoenix" class="item-control">
-                                    <input type="checkbox" id="status-p3-phoenix" data-item-id="p3-phoenix" />
-                                    Terminé
-                                    <span class="indicator"></span>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="img-thumb-container">
-                                    <img class="img-thumb" src="https://www.vhpg.com/t/d2r-phoenix-runeword.png"
-                                        alt="Phoenix" />
-                                </div>
-                                <div>
-                                    </div>
-                            </div>
-                            <p class="muted">Runes: Vex + Vex + Lo + Jah. Où : boss du mode Enfer + Kurast Inférieur.
-                                Chance : extrêmement faible.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="card">
-                    <div class="section-title">
-                        <h2>Roadmap d'obtention (ordre conseillé)</h2>
-                        <div class="muted">Suivre cet ordre pour limiter le temps perdu</div>
-                    </div>
-                    <ol class="muted">
-                        <li>**Comtesse en Mode Cauchemar** → **Esprit**, **Trahison**, **Tradition** (si nécessaire) et
-                            runes de base.</li>
-                        <li>Mephisto en Mode Cauchemar → Vengeance des Titans, Couronne du Paysan, Queue de Rasoir.</li>
-                        <li>Baal en Mode Cauchemar → Expérience + Vengeance des Titans + équipement.</li>
-                        <li>**Comtesse en Mode Enfer** → farm les runes **Ist**.</li>
-                        <li>Fosses en Mode Enfer / Vaches en Mode Enfer → Uniques et bases.</li>
-                        <li>**Supercoffres de Kurast Inférieur** → farm les runes Vex, Jah, Ber.</li>
-                        <li>Artisanat d'Infinité → priorité si possible (pour le Mercenaire).</li>
-                        <li>Artisanat d'Énigme / Phénix → finaliser l'équipement.</li>
-                    </ol>
-                </section>
-
-            </main>
-
-        </div>
-
-        <footer>Besoin d'ajouts (tableau Découverte Magique exact, images officielles, export Markdown) ? Dis-moi ce que
-            tu veux que j'ajoute.</footer>
+    <h1>Guide Campagne Path of exile pour Melvin le gros FDP</h1>
+    <div id="filter-controls" style="text-align: center; margin-bottom: 20px;">
+        <button id="toggle-hide-completed" class="act-btn">
+            Cacher les étapes terminées
+        </button>
     </div>
 
-    <script>
-        // Fonctionnalités existantes (copie, téléchargement)
-        const roadmap = `1) Comtesse en Mode Cauchemar -> Esprit / Trahison / Tradition / runes de base\n2) Mephisto en Mode Cauchemar -> Vengeance des Titans, Couronne du Paysan, Queue de Rasoir\n3) Baal en Mode Cauchemar -> Expérience + Vengeance des Titans + équipement\n4) Comtesse en Mode Enfer -> farm les runes Ist\n5) Fosses en Mode Enfer / Vaches en Mode Enfer -> Uniques et bases\n6) Supercoffres de Kurast Inférieur -> farm les runes Vex/Jah/Ber\n7) Artisanat d'Infinité -> priorité si possible\n8) Artisanat d'Énigme / Phénix -> finaliser l'équipement`;
+    <div id="act-menu">
+    </div>
+    <div id="act-menu">
+        <button class="act-btn" data-act="1">ACTE I</button>
+        <button class="act-btn" data-act="2">ACTE II</button>
+        <button class="act-btn" data-act="3">ACTE III</button>
+        <button class="act-btn" data-act="4">ACTE IV</button>
+        <button class="act-btn" data-act="5">ACTE V</button>
+        <button class="act-btn" data-act="6">ACTE VI</button>
+        <button class="act-btn" data-act="7">ACTE VII</button>
+        <button class="act-btn" data-act="8">ACTE VIII</button>
+        <button class="act-btn" data-act="9">ACTE IX</button>
+        <button class="act-btn" data-act="10">ACTE X</button>
+    </div>
+    <hr>
 
-        document.getElementById('copyRoad')?.addEventListener('click', () => {
-            navigator.clipboard.writeText(roadmap).then(() => {
-                alert('Feuille de route copiée dans le presse-papiers');
-            });
-        });
+    <div id="content-container">
 
-        document.getElementById('downloadBtn')?.addEventListener('click', () => {
-            const html = document.documentElement.outerHTML;
-            const blob = new Blob([html], {
-                type: 'text/html'
-            });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Javazon_Lightning_Guide.html';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
-        });
+        <div id="act-1-content" class="act-content">
+            <h2>Acte I</h2>
+            <ol>
+                <li data-act="1" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Hillock</span> à la fin de la Plage <span class="White">Twilight
+                            Strand</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Lioneye's Watch</span> et parlez à <span
+                            class="pnj">Tarkleigh</span> pour obtenir votre récompense.
+                    </label>
+                </li>
+                <li data-act="1" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez <span class="White">The Coast</span> et courez jusqu'à la fin de la zone. Assurez-vous
+                        d'obtenir le <span class="Blue">Waypoint</span>. Entrez dans les Étendues Boueuses <span
+                            class="White">The Mud Flats</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez les 3 <span class="Red">Rhoa Nests</span>. Une fois que vous avez le <span
+                            class="Green">Ammonite Glyph</span>, <span class="Green">Haliotis Glyph</span> et <span
+                            class="Green">Roseus Glyph</span>, trouvez le mur de glyphes et ouvrez la sortie vers <span
+                            class="White">The Submerged Passage</span>. Entrez et prenez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Reprenez le <span class="Blue">Waypoint</span> vers la Côte et entrez dans <span
+                            class="White">Tidal Island</span> sur la droite. Courez directement vers <span
+                            class="Red">Hailrake</span> et tuez-le. Déconnectez-vous et rendez la quête à <span
+                            class="pnj">Nessa</span>. Prenez la <span class="Green">Quicksilver Flask</span> comme
+                        récompense.
+                    </label>
+                </li>
+                <li data-act="1" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Tarkleigh</span> pour la gemme de récompense.
+                    </label>
+                </li>
+                <li data-act="1" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span> vers le <span class="White">Submerged
+                            Passage</span>. Si vous trouvez l'entrée <span class="White">Flooded Depths</span>, placez
+                        un portail pour un éventuel retour rapide plus tard.
+                    </label>
+                </li>
+                <li data-act="1" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez la sortie vers <span class="White">the Ledge</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span> et continuez vers la sortie <span class="White">the
+                            Climb</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez entièrement <span class="White">the Climb</span>, en prenant le <span
+                            class="Blue">Waypoint</span> si vous le croisez.
+                    </label>
+                </li>
+                <li data-act="1" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Lower Prison</span> et prenez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span> vers <span class="White">Lioneye's Watch</span>. Si
+                        vous êtes assez rapide, votre portail devrait être ouvert. Sinon, prenez le <span
+                            class="Blue">Waypoint</span> vers les <span class="White">Flooded Depths</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez l'entrée des <span class="White">Flooded Depths</span>. Généralement, elle se trouve au
+                        début de la carte.
+                    </label>
+                </li>
+                <li data-act="1" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez le <span class="Red">Deep Dweller</span>, puis déconnectez-vous.
+                    </label>
+                </li>
+                <li data-act="1" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Tarkleigh</span> pour le <span class="Green">Book of Skill</span>,
+                        puis prenez le <span class="Blue">Waypoint</span> vers la <span class="White">Lower
+                            Prison</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez l'Épreuve du Labyrinthe (<span class="White">Labyrinth Trial</span>) et terminez-la.
+                    </label>
+                </li>
+                <li data-act="1" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez la sortie vers la <span class="White">Upper Prison</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez la sortie vers le <span class="White">Warden's Quarter's</span>, et dirigez-vous
+                        immédiatement vers les <span class="White">Warden's Chambers</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Brutus</span>. Déconnectez-vous ou utilisez un portail pour retourner en
+                        ville.
+                    </label>
+                </li>
+                <li data-act="1" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Tarkleigh</span> pour la gemme de récompense.
+                    </label>
+                </li>
+                <li data-act="1" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Reprenez le <span class="Blue">Waypoint</span> vers <span class="White">Prisoner's Gate</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Sortez dans le <span class="White">Ship Graveyard</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span>, qui se trouve toujours près de l'entrée de la
+                        zone.
+                    </label>
+                </li>
+                <li data-act="1" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez la sortie vers la <span class="White">Cavern of Wrath</span> et obtenez le <span
+                            class="Blue">Waypoint</span>. Si vous trouvez l'entrée de la <span class="White">Ship
+                            Graveyard Cave</span> en chemin, placez un portail.
+                    </label>
+                </li>
+                <li data-act="1" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Reprenez le <span class="Blue">Waypoint</span> vers <span class="White">Lioneye's Watch</span>
+                        et utilisez votre portail pour revenir au <span class="White">Ship Graveyard</span>, ou le <span
+                            class="Blue">Waypoint</span> vers <span class="White">Ship Graveyard</span> si vous n'avez
+                        pas trouvé la <span class="White">Ship Graveyard Cave</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="26">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans la <span class="White">Ship Graveyard Cave</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="27">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Récupérez l'<span class="Green">Allflame</span> et revenez au <span class="White">Ship
+                            Graveyard</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="28">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="Red">Fairgraves</span> et tuez-le.
+                    </label>
+                </li>
+                <li data-act="1" data-step="29">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Soit vous vous déconnectez, soit vous reprenez le <span class="Blue">Waypoint</span> vers <span
+                            class="White">Lioneye's Watch</span>. Parlez à <span class="pnj">Bestel</span> pour recevoir
+                        le <span class="Green">Book of Skill</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="30">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Nessa</span> pour la gemme de récompense.
+                    </label>
+                </li>
+                <li data-act="1" data-step="31">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span> vers la <span class="White">Cavern of Wrath</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="32">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Sortez dans la <span class="White">Cavern of Anger</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="33">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Sortez dans l'<span class="White">Merveil's Lair</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="34">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Merveil</span> et entrez dans la <span class="White">Southern
+                            Forest</span>.
+                    </label>
+                </li>
+                <li data-act="1" data-step="35">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez la zone et entrez dans le <span class="White">Forest Encampment</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
 
-        const preview = document.getElementById('htmlPreview');
-        if (preview) {
-            preview.textContent = '';
-        }
+        <div id="act-2-content" class="act-content">
+            <h2>Acte II</h2>
+            <ol>
+                <li data-act="2" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez la sortie à droite vers <span class="White">The Old Fields</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Si vous n'avez pas trouvé une deuxième <span class="Green">Quicksilver Flask</span>, cherchez
+                        <span class="White">The Den</span>, entrez-y, trouvez et tuez <span class="Red">The Great White
+                            Beast</span> et reprenez la sortie derrière lui pour revenir à <span class="White">The Old
+                            Fields</span>. Sinon, sautez cette zone et allez à <span class="White">The
+                            Crossroads</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="Blue">Waypoint</span> en suivant la route.
+                    </label>
+                </li>
+                <li data-act="2" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le chemin de gauche, avancez jusqu'à <span class="White">The Chamber of Sins Level
+                            1</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et descendez à <span class="White">The Chamber of Sins Level 2</span>, en récupérant le
+                        <span class="Blue">Waypoint</span> si vous le croisez.
+                    </label>
+                </li>
+                <li data-act="2" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et complétez le <span class="White">Labyrinth Trial</span>. Ensuite, avancez jusqu'à la
+                        fin, tuez <span class="Red">Fidelitas</span>, ramassez la <span class="Green">Fidelitas’
+                            Spike</span> qu'il lâche, cliquez sur le <span class="Green">Strange Device</span> et
+                        ramassez la <span class="Green">Baleful Gem</span>, puis déconnectez-vous (logout).
+                    </label>
+                </li>
+                <li data-act="2" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Récupérez votre gemme récompense auprès de <span class="pnj">Gruest</span>, et téléportez-vous à
+                        <span class="White">The Crossroads</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Allez à <span class="White">The Fellshrine Ruins</span> et trouvez <span class="White">The Crypt
+                            Level 1</span> et entrez-y.
+                    </label>
+                </li>
+                <li data-act="2" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et complétez le <span class="White">Labyrinth Trial</span>, puis avancez jusqu'à <span
+                            class="White">The Crypt Level 2</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez <span class="Red">Archbishop Geofri the Abashed</span>, tuez-le ou sautez-le (il ne
+                        fait pas partie de la quête), et cliquez sur l'autel derrière lui pour la <span
+                            class="Green">Golden Hand</span>, ramassez-la, et déconnectez-vous.
+                    </label>
+                </li>
+                <li data-act="2" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Récupérez votre récompense <span class="Green">Skill Book</span> auprès de <span
+                            class="pnj">Yeena</span>, et téléportez-vous à <span class="White">The Crossroads</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Cette fois, allez tout droit et entrez dans <span class="White">the Broken Bridge</span>.
+                        Traversez la zone et occupez-vous de <span class="Red">Kraityn</span> (tuez-le ou aidez-le),
+                        puis déconnectez-vous.
+                    </label>
+                </li>
+                <li data-act="2" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez la sortie à gauche vers <span class="White">Riverways</span>, suivez la route et ramassez
+                        le <span class="Blue">Waypoint</span>. Continuez à suivre la route pour trouver la sortie vers
+                        <span class="White">the Western Forest</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Avancez sur le chemin jusqu'à ce que vous trouviez le <span class="Blue">Waypoint</span>. Courez
+                        dans la forêt du côté opposé de la route, depuis le <span class="Blue">Waypoint</span>. Cherchez
+                        le mur d'arbres couverts de toiles d'araignées et suivez-le jusqu'à ce que vous trouviez
+                        l'entrée de <span class="White">The Weaver's Chambers</span> et entrez.
+                    </label>
+                </li>
+                <li data-act="2" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez <span class="White">The Weaver's Chambers</span>, tuez <span class="Red">The
+                            Weaver</span> et ramassez <span class="Green">Maligaro's Spike</span> et déconnectez-vous.
+                    </label>
+                </li>
+                <li data-act="2" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Récupérez votre récompense de gemme auprès de <span class="pnj">Slik</span>, et téléportez-vous
+                        à <span class="White">Riverways</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Passez entre les 2 piliers et continuez de courir dans cette direction pour trouver la sortie
+                        vers <span class="White">The Wetlands</span> et entrez-y.
+                    </label>
+                </li>
+                <li data-act="2" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et tuez ou aidez <span class="Red">Oak</span>. Avancez pour trouver le <span
+                            class="Blue">Waypoint</span>, reprenez-le pour revenir à <span class="White">the Western
+                            Forest</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Du côté de la route où se trouve le <span class="Blue">Waypoint</span>, vous trouverez <span
+                            class="Red">Alira</span> dans son camp, le long du mur de la carte. Trouvez-la et tuez-la.
+                        Si vous aidez <span class="Red">Alira</span>, faites-le à la place.
+                    </label>
+                </li>
+                <li data-act="2" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Maintenant, suivez le mur, en allant vers la gauche, jusqu'à ce que vous trouviez le camp des
+                        <span class="Red">Blackguards</span>. Tuez leur chef, ramassez le <span class="Green">Thaumetic
+                            Emblem</span>, et utilisez-le sur le <span class="Green">Thaumetic Seal</span>, puis
+                        déconnectez-vous.
+                    </label>
+                </li>
+                <li data-act="2" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        <span class="Blue">Waypoint</span> vers le Town de l'Acte 1, récupérez votre récompense <span
+                            class="Green">Skill Book</span> auprès de <span class="pnj">Tarkleigh</span>. Retournez à
+                        l'Acte 2, parlez aux <span class="pnj">NPCs</span> pour collecter les récompenses, et
+                        téléportez-vous à <span class="White">The Wetlands</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Empoisonnez les racines et entrez dans <span class="White">The Vaal Ruins</span>, brisez le
+                        sceau une fois rencontré et sortez dans <span class="White">Northern Forest</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Dirigez-vous vers le haut à travers <span class="White">Northern Forest</span> jusqu'à ce que
+                        vous trouviez <span class="White">The Caverns</span>. Sautez <span class="White">The Dread
+                            Thicket</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Récupérez le <span class="Blue">Waypoint</span> une fois rencontré.
+                    </label>
+                </li>
+                <li data-act="2" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez l'entrée de <span class="White">The Ancient Pyramid</span> et entrez.
+                    </label>
+                </li>
+                <li data-act="2" data-step="26">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Montez les niveaux de la <span class="White">Pyramid</span> jusqu'à ce que vous trouviez <span
+                            class="White">The Pyramid Apex</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="27">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Abattez <span class="Red">The Vaal Oversoul</span> et sortez dans <span class="White">The City
+                            of Sarn</span>.
+                    </label>
+                </li>
+                <li data-act="2" data-step="28">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez les <span class="Red">Blackguards</span> harcelant <span class="pnj">Clarissa</span>,
+                        tuez-les tous pour la sauver et attendez qu'elle soit sur ses pieds. Assurez-vous de lui parler
+                        avant de partir.
+                    </label>
+                </li>
+                <li data-act="2" data-step="29">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Suivez le petit escalier directement sous <span class="pnj">Clarrissa</span>, suivez le bord de
+                        l'eau jusqu'à ce que vous localisiez <span class="White">The Sarn Encampment</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
 
-        // LOGIQUE DE SAUVEGARDE ET DE COULEUR (LocalStorage)
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('.item-control input[type="checkbox"]');
+        <div id="act-3-content" class="act-content">
+            <h2>Acte III</h2>
+            <ol>
+                <li data-act="3" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Sortez dans <span class="White">the Slums</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Crematorium</span> et obtenez le <span
+                            class="Blue">Waypoint</span>. Notez l'emplacement de la <span class="White">Sewer
+                            Grating</span> si vous l'avez rencontrée en chemin.
+                    </label>
+                </li>
+                <li data-act="3" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Labyrinth Trial</span> dans le <span
+                            class="White">Crematorium</span> et complétez-le.
+                    </label>
+                </li>
+                <li data-act="3" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez <span class="Red">Piety</span> et battez-la. Interagissez avec <span
+                            class="pnj">Tolman</span> et prenez le <span class="Green">Tolman’s Bracelet</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Déconnectez-vous ou utilisez un portail pour retourner en ville. Parlez à <span
+                            class="pnj">Clarissa</span> pour recevoir les <span class="Green">Sewer Keys</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">the Slums</span> et trouvez la <span class="White">Sewer
+                            Grating</span>. Ouvrez-la et entrez dans <span class="White">the Sewers</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez les trois <span class="Green">Platinum Busts</span>. Il y en a toujours un avant le
+                        <span class="Blue">Waypoint</span> et deux après.
+                    </label>
+                </li>
+                <li data-act="3" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez la sortie vers <span class="White">the Marketplace</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        À droite du <span class="Blue">Waypoint</span> se trouve l'entrée des <span
+                            class="White">Catacombs</span>. Entrez et complétez le <span class="White">Labyrinth
+                            Trial</span>, puis déconnectez-vous et retournez au <span class="White">Marketplace</span>
+                        via le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez la sortie vers <span class="White">the Battlefront</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="Blue">Waypoint</span>, qui se trouve généralement au centre de la zone.
+                    </label>
+                </li>
+                <li data-act="3" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Dirigez-vous vers le bas depuis le <span class="Blue">Waypoint</span> jusqu'à ce que vous
+                        trouviez le <span class="Green">Blackguard Chest</span>, qui ressemble à un chariot, et prenez
+                        la <span class="Green">Ribbon Spool</span> qu'il contient.
+                    </label>
+                </li>
+                <li data-act="3" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Dirigez-vous vers la gauche depuis le <span class="Blue">Waypoint</span> jusqu'à ce que vous
+                        trouviez l'entrée de <span class="White">The Docks</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        (Optionnel) : Selon votre retard de niveau, vous pourriez vouloir tuer autant de monstres que
+                        possible dans <span class="White">The Docks</span> pour rattraper le niveau de la zone.
+                    </label>
+                </li>
+                <li data-act="3" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez le <span class="Green">Supply Container</span> et ramassez le <span
+                            class="Green">Thaumetic Sulphite</span>, puis déconnectez-vous.
+                    </label>
+                </li>
+                <li data-act="3" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Reprenez le <span class="Blue">Waypoint</span> pour retourner à <span
+                            class="White">Battlefront</span> et dirigez-vous vers le haut jusqu'à ce que vous trouviez
+                        l'entrée du <span class="White">Solaris Temple (Level One)</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez le temple jusqu'à ce que vous trouviez l'entrée du <span class="White">Solaris Temple
+                            (Level Two)</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Continuez à travers le temple jusqu'à ce que vous trouviez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Lady Dialla</span> pour recevoir une récompense d'amulette et le
+                        <span class="Green">Infernal Talc</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Déconnectez-vous ou utilisez un portail pour retourner en ville, puis parlez à <span
+                            class="pnj">Hargan</span> pour recevoir le <span class="Green">Book of Skill</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span> vers <span class="White">the Sewers</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Allez vers le bas/la gauche depuis le <span class="Blue">Waypoint</span> et brûlez l'<span
+                            class="Red">Undying Blockage</span>. C'est toujours extrêmement proche du <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">the Ebony Barracks</span> et obtenez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Dirigez-vous vers le haut à travers <span class="White">the Ebony Barracks</span> jusqu'à ce que
+                        vous trouviez <span class="Red">General Gravicius</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="26">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">General Gravicius</span> et continuez de monter.
+                    </label>
+                </li>
+                <li data-act="3" data-step="27">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">the Lunaris Temple (Level One)</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="28">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span> et entrez dans <span class="White">the Lunaris
+                            Temple (Level Two)</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="29">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Cherchez les escaliers montants pour trouver rapidement le bon chemin. Continuez à suivre les
+                        escaliers jusqu'à ce que vous atteigniez les chariots. Le côté avec deux chariots est toujours
+                        une impasse, tandis que le côté avec un seul chariot est le bon chemin.
+                    </label>
+                </li>
+                <li data-act="3" data-step="30">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Piety</span> et ramassez la <span class="Green">Tower Key</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="31">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez en ville et parlez à <span class="pnj">Grigor</span> pour recevoir le <span
+                            class="Green">Book of Skill</span>. Parlez à <span class="pnj">Maramoa</span> pour recevoir
+                        la récompense de gemme.
+                    </label>
+                </li>
+                <li data-act="3" data-step="32">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span> vers <span class="White">the Ebony Barracks</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="33">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Dirigez-vous vers la droite du <span class="Blue">Waypoint</span> jusqu'à ce que vous trouviez
+                        l'entrée des <span class="White">Imperial Gardens</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="34">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Suivez le chemin carrelé jusqu'à ce que vous trouviez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="35">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        (Optionnel) : Si vous avez besoin de gemmes spécifiques de la quête de la <span
+                            class="White">Library</span>, prenez le chemin supérieur gauche à la fourche à trois voies,
+                        en montant les escaliers. Entrez dans la <span class="White">Library</span> et obtenez le <span
+                            class="Blue">Waypoint</span> à mi-chemin de la zone. Continuez jusqu'à ce que vous trouviez
+                        la <span class="Green">Loose Candle</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="36">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Cliquez dessus et entrez dans <span class="White">The Archives</span>. Collectez les quatre
+                        <span class="Green">Golden Pages</span> avant de retourner en ville via portail ou déconnexion.
+                        Reprenez le <span class="Blue">Waypoint</span> vers la <span class="White">Library</span> et
+                        parlez à <span class="pnj">Siosa</span> pour votre récompense. Reprenez le <span
+                            class="Blue">Waypoint</span> vers les <span class="White">Imperial Gardens</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="37">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Complétez le dernier <span class="White">Labyrinth Trial</span> pour le Lab Normal. À partir de
+                        la fourche à trois voies juste au-dessus du <span class="Blue">Waypoint</span>, dirigez-vous
+                        vers le haut et faites lentement un chemin en serpentin vers la gauche. Le <span
+                            class="White">Labyrinth Trial</span> se trouve presque toujours dans le coin supérieur
+                        gauche de la zone.
+                    </label>
+                </li>
+                <li data-act="3" data-step="38">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        À partir de la fourche à trois voies au-dessus du <span class="Blue">Waypoint</span>,
+                        dirigez-vous vers le bas à droite et montez les escaliers. Commencez à vous diriger vers le haut
+                        à droite, en suivant le chemin carrelé jusqu'à ce que vous trouviez l'entrée du <span
+                            class="White">Sceptre of God</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="39">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans le <span class="White">Sceptre of God</span> et montez les niveaux jusqu'à ce que
+                        vous trouviez l'<span class="White">Upper Sceptre of God</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="40">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans l'<span class="White">Upper Sceptre of God</span> et montez les niveaux.
+                    </label>
+                </li>
+                <li data-act="3" data-step="41">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Dominus</span>.
+                    </label>
+                </li>
+                <li data-act="3" data-step="42">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans l'<span class="White">Aqueduct</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="3" data-step="43">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Highgate</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
 
-            // 1. CHARGER l'état sauvegardé
-            checkboxes.forEach(checkbox => {
-                const itemId = checkbox.getAttribute('data-item-id');
-                const storageKey = `status-${itemId}`;
-                const itemElement = document.getElementById(itemId);
+        <div id="act-4-content" class="act-content">
+            <h2>Acte IV</h2>
+            <ol>
+                <li data-act="4" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Dried Lake</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez <span class="Red">Voll</span>, battez-le et prenez <span class="Green">Deshret’s
+                            Banner</span>. Déconnectez-vous ou utilisez un portail pour retourner en ville.
+                    </label>
+                </li>
+                <li data-act="4" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Ouvrez les mines en utilisant <span class="Green">Deshret’s Banner</span> et entrez dans <span
+                            class="White">The Mines (Level One)</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez la zone et entrez dans <span class="White">The Mines (Level Two)</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez <span class="Green">Deshret’s Spirit</span> et libérez-le.
+                    </label>
+                </li>
+                <li data-act="4" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Crystal Veins</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez le <span class="Blue">Waypoint</span>, à la fin de la zone, et retournez à <span
+                            class="White">Highgate</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Tasuni</span> pour recevoir la récompense <span class="Green">Book of
+                            Skill</span>. Parlez à <span class="pnj">Oyun</span> pour recevoir la récompense de gemme.
+                    </label>
+                </li>
+                <li data-act="4" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        *C'est ici que nous vous recommandons de compléter votre premier Labyrinthe et de faire votre
+                        Ascension.*
+                    </label>
+                </li>
+                <li data-act="4" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez au <span class="White">Crystal Veins</span> via le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        *Les étapes suivantes peuvent être complétées dans l'ordre de votre choix. Nous préférons faire
+                        <span class="White">Kaom’s Dream</span> en premier, car le boss est généralement un peu moins
+                        dangereux aux niveaux inférieurs.* Entrez dans <span class="White">Kaom’s Dream</span> et
+                        traversez la zone jusqu'à <span class="White">Kaom’s Stronghold</span>. Obtenez le <span
+                            class="Blue">Waypoint</span> et continuez jusqu'à <span class="White">Caldera of the
+                            King</span>. Battez <span class="Red">Kaom</span> et ramassez l'<span class="Green">Eye of
+                            Fury</span>. Retournez en ville via déconnexion ou portail, puis reprenez le <span
+                            class="Blue">Waypoint</span> vers <span class="White">Crystal Veins</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Daresso’s Dream</span> et traversez la zone jusqu'à ce que vous
+                        rencontriez <span class="Red">Barkhul</span>. Battez-le ainsi que ses gardes du corps, puis
+                        entrez dans <span class="White">The Grand Arena</span> et obtenez le <span
+                            class="Blue">Waypoint</span>. Traversez les arènes jusqu'à ce que vous rencontriez <span
+                            class="Red">The Trio</span>, un groupe de trois ennemis uniques. Cela indique que <span
+                            class="Red">Daresso</span> se trouve dans la zone suivante et que vous êtes sur le bon
+                        chemin. Battez <span class="Red">The Trio</span> et entrez dans <span class="White">The Ring of
+                            Blades</span>. Battez <span class="Red">Daresso</span> et prenez l'<span class="Green">Eye
+                            of Desire</span>. Déconnectez-vous ou utilisez un portail pour retourner en ville, puis
+                        reprenez le <span class="Blue">Waypoint</span> vers <span class="White">Crystal Veins</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Dialla</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Belly of the Beast (Level One)</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="4" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Belly of the Beast (Level Two)</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="4" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Bowels of the Beast</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Battez <span class="Red">Piety</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Harvest</span> et obtenez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Abattez les 3 gardiens de <span class="Red">Malachai</span> : <span class="Red">Doedre</span>,
+                        <span class="Red">Maligaro</span> et <span class="Red">Shavronne</span>. Récupérez les <span
+                            class="Green">various organs</span> qu'ils lâchent.
+                    </label>
+                </li>
+                <li data-act="4" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Utilisez les <span class="Green">3 organ</span> pour entrer dans <span class="White">The Black
+                            Core</span>, qui se trouve à côté du <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Malachai</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Déconnectez-vous ou utilisez un portail pour retourner en ville.
+                    </label>
+                </li>
+                <li data-act="4" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Dialla</span> dans la partie la plus haute de la ville pour recevoir
+                        la récompense de gemme.
+                    </label>
+                </li>
+                <li data-act="4" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Sortez dans <span class="White">The Ascent</span>, qui se trouve dans la partie supérieure
+                        droite de <span class="White">Highgate</span>.
+                    </label>
+                </li>
+                <li data-act="4" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez et interagissez avec le résonateur, et prenez le <span class="Green">Oriath
+                            Portal</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
 
-                if (localStorage.getItem(storageKey) === 'checked') {
-                    checkbox.checked = true;
-                    if (itemElement) {
-                        itemElement.classList.add('completed');
-                    }
-                }
-            });
+        <div id="act-5-content" class="act-content">
+            <h2>Acte V</h2>
+            <ol>
+                <li data-act="5" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span> et traversez les <span class="White">Slave
+                            Pens</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Overseer Crow</span>, et montez à l'échelle qui descend pour entrer dans
+                        l'<span class="White">Overseer’s Tower</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Lani</span> pour recevoir la récompense d'anneau.
+                    </label>
+                </li>
+                <li data-act="5" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans les <span class="White">Control Blocks</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="Green">Miasmeter</span>. Généralement, cet objet se trouve à peu près à
+                        mi-chemin de la zone, dans la partie la plus à gauche de la zone.
+                    </label>
+                </li>
+                <li data-act="5" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Justicar Casticus</span> à la fin de la zone et ramassez les <span
+                            class="Green">Eyes of Zeal</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Oriath Square</span> et obtenez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans les <span class="White">Templar Courts</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez la zone et entrez dans <span class="White">The Chamber of Innocence</span>, en
+                        obtenant le <span class="Blue">Waypoint</span> immédiatement.
+                    </label>
+                </li>
+                <li data-act="5" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez <span class="White">The Sanctum of Innocence</span> et tuez <span class="Red">High
+                            Templar Avarius</span> et <span class="Red">Innocence</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Chamber of Innocence</span> par la sortie nouvellement
+                        ouverte.
+                    </label>
+                </li>
+                <li data-act="5" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans les <span class="White">Torched Courts</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="5" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Ruined Square</span>. Les entrées vers d'autres zones dans <span
+                            class="White">Ruined Square</span> sont toujours dans la même zone générale.
+                    </label>
+                </li>
+                <li data-act="5" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans l'<span class="White">Ossuary</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="Green">Sign of Purity</span> et retournez à <span class="White">Ruined
+                            Square</span> par la sortie.
+                    </label>
+                </li>
+                <li data-act="5" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez <span class="White">The Reliquary</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez chacun des <span class="Green">Kitava’s Torments</span> et déconnectez-vous ou utilisez
+                        un portail pour retourner en ville.
+                    </label>
+                </li>
+                <li data-act="5" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez aux <span class="pnj">NPCs</span> pour les récompenses de quête.
+                    </label>
+                </li>
+                <li data-act="5" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        *Vous êtes sur le point de combattre <span class="Red">Kitava</span> et de subir une pénalité de
+                        résistance de -30%. Il est conseillé de vous assurer que vos résistances élémentaires sont
+                        sur-captées d'environ 30%, afin de ne pas trop souffrir dans l'acte à venir à cause de cette
+                        affliction.*
+                    </label>
+                </li>
+                <li data-act="5" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Ruined Square</span> via le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans le <span class="White">Cathedral Rooftop</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="5" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans le <span class="White">Cathedral Apex</span> et battez <span
+                            class="Red">Kitava</span>.
+                    </label>
+                </li>
+                <li data-act="5" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Lily Roth</span> et naviguez vers <span
+                            class="White">Wraeclast</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
 
-            // 2. SAUVEGARDER l'état au changement
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const itemId = this.getAttribute('data-item-id');
-                    const storageKey = `status-${itemId}`;
-                    const itemElement = document.getElementById(itemId);
+        <div id="act-6-content" class="act-content">
+            <h2>Acte VI</h2>
+            <ol>
+                <li data-act="6" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Sortez vers <span class="White">The Twilight Strand</span>. Nettoyez la zone de tous les
+                        monstres et déconnectez-vous ou utilisez un portail pour retourner en ville, puis parlez à <span
+                            class="pnj">Lilly Roth</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Coast</span> et traversez la zone. Obtenez le <span
+                            class="Blue">Waypoint</span> à la fin.
+                    </label>
+                </li>
+                <li data-act="6" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">the Mud Flats</span>. Trouvez et tuez <span class="Red">The
+                            Dishonored Queen</span> et prenez l'<span class="Green">Eye of Conquest</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez la sortie vers <span class="White">the Karui Fortress</span>. Généralement, c'est dans
+                        la partie supérieure centrale de la zone.
+                    </label>
+                </li>
+                <li data-act="6" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Tukohama’s Keep</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Battez <span class="Red">Tukohama</span>. Parlez à <span class="pnj">Sin</span> et sélectionnez
+                        <span class="Green">Soul of Tukohama</span> comme votre Dieu Mineur du Panthéon.
+                    </label>
+                </li>
+                <li data-act="6" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">The Ridge</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span> et retournez à <span class="White">Lioneye’s
+                            Watch</span>. Parlez à <span class="pnj">Tarkleigh</span> pour recevoir une récompense <span
+                            class="Green">Skill Book</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">The Ridge</span> via le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">Lower Prison</span> et obtenez le <span
+                            class="Blue">Waypoint</span>, juste à l'intérieur de l'entrée.
+                    </label>
+                </li>
+                <li data-act="6" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Labyrinth Trial</span> et complétez-le.
+                    </label>
+                </li>
+                <li data-act="6" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">Shavronne’s Tower</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Montez la tour jusqu'à ce que vous atteigniez le <span class="White">Prison Rooftop</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Brutus</span> et <span class="Red">Shavronne</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Passez par les <span class="White">Warden’s Chambers</span> et entrez dans <span
+                            class="White">Prisoner’s Gate</span>. Obtenez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez la <span class="White">Valley of the Fire Drinker</span> et battez <span
+                            class="Red">Abberath</span>. Déconnectez-vous ou utilisez un portail pour retourner en ville
+                        et parlez à <span class="pnj">Bestel</span> pour la récompense <span class="Green">Skill
+                            Book</span>. Reprenez le <span class="Blue">Waypoint</span> vers <span
+                            class="White">Prisoner’s Gate</span>. Dirigez-vous dans la direction opposée à celle où vous
+                        avez trouvé la <span class="White">Valley of the Fire Drinker</span> (par exemple, si <span
+                            class="Red">Abberath</span> est en bas à droite, allez en haut à droite, et vice versa).
+                    </label>
+                </li>
+                <li data-act="6" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Western Forest</span>. Suivez la route principale pour trouver
+                        le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">The Riverways</span>. Suivez la route principale pour
+                        trouver le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">The Wetlands</span>, généralement situé dans la
+                        partie supérieure de la zone. Trouvez le <span class="White">Spawning Ground</span> et tuez
+                        <span class="Red">the Puppet Mistress</span>. Déconnectez-vous ou utilisez un portail pour
+                        retourner en ville et parlez à <span class="pnj">Tarkleigh</span> pour la récompense <span
+                            class="Green">Skill Book</span>. Retournez à <span class="White">The Riverways</span> via le
+                        <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">Southern Forest</span>. L'entrée est généralement
+                        située au milieu/en bas à droite de la zone.
+                    </label>
+                </li>
+                <li data-act="6" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span> avant de sortir dans <span class="White">Cavern of
+                            Anger</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Ouvrez le <span class="Green">Flag Chest</span> et prenez le <span class="Green">Black
+                            Flag</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans le passage et traversez la caverne jusqu'à atteindre <span class="White">The
+                            Beacon</span>. Entrez et obtenez immédiatement le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez la structure en forme de pyramide et montez-la. Escortez les deux piliers jusqu'à
+                        leurs emplacements en vous tenant dans le cercle lumineux.
+                    </label>
+                </li>
+                <li data-act="6" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Cliquez sur l'<span class="Green">Ignition Switch</span>, puis à nouveau sur <span
+                            class="White">the Beacon</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="26">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Weylam Roth</span> et naviguez vers <span class="White">the Brine
+                            King’s Reef</span>. Obtenez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="6" data-step="27">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez et entrez dans <span class="White">the Brine King’s Throne</span>. C'est généralement
+                        plus facile en suivant le mur de gauche.
+                    </label>
+                </li>
+                <li data-act="6" data-step="28">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">the Brine King</span>. Parlez à <span class="pnj">Sin</span> et obtenez
+                        votre Dieu Majeur <span class="Green">Brine King</span> du Panthéon.
+                    </label>
+                </li>
+                <li data-act="6" data-step="29">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Weylam Roth</span> et naviguez vers l'<span class="White">Act
+                            VII</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
 
-                    if (this.checked) {
-                        localStorage.setItem(storageKey, 'checked');
-                        if (itemElement) {
-                            itemElement.classList.add('completed');
-                        }
-                    } else {
-                        localStorage.removeItem(storageKey);
-                        if (itemElement) {
-                            itemElement.classList.remove('completed');
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+        <div id="act-7-content" class="act-content">
+            <h2>Acte VII</h2>
+            <ol>
+                <li data-act="7" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Broken Bridge</span>. Déplacez-vous vers la partie
+                        inférieure gauche de la zone.
+                    </label>
+                </li>
+                <li data-act="7" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Crossroads</span>. Suivez la route et obtenez le <span
+                            class="Blue">Waypoint</span> au centre de la zone.
+                    </label>
+                </li>
+                <li data-act="7" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez la fourche inférieure depuis le <span class="Blue">Waypoint</span> et entrez dans <span
+                            class="White">Fellshrine Ruins</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Crypt</span> et obtenez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Labyrinth Trial</span> et complétez-le.
+                    </label>
+                </li>
+                <li data-act="7" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="Green">Sarcophagus</span> et descendez à <span class="White">The Crypt
+                            (Level Two)</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez le <span class="Green">Container of Sins</span> et prenez <span
+                            class="Green">Maligaro’s Map</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Bridge Encampment</span> via portail ou déconnexion.
+                    </label>
+                </li>
+                <li data-act="7" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">The Crossroads</span> via <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le chemin supérieur depuis le <span class="Blue">Waypoint</span> et entrez dans <span
+                            class="White">Chamber of Sins (Level 1)</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span> à la croisée centrale et insérez <span
+                            class="Green">Maligaro’s Map</span> dans le <span class="Green">Map Device</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Maligaro’s Sanctum</span> et avancez jusqu'à ce que vous
+                        trouviez <span class="White">Maligaro’s Workshop</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Maligaro</span> et prenez le <span class="Green">Black Venom</span>.
+                        Quittez la carte via un <span class="Green">Portal Scroll</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Silk</span> et prenez la <span class="Green">Obsidian Key</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">Chamber of Sins (Level Two)</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Labyrinth Trial</span> et complétez-le.
+                    </label>
+                </li>
+                <li data-act="7" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Den</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez et sortez dans <span class="White">Ashen Fields</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Fortress Encampment</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Abattez <span class="Red">Greust</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Northern Forest</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Dread Thicket</span>. Entrez dans <span class="White">Den of
+                            Despair</span> et tuez <span class="Red">Gruthkul</span>, puis retournez à <span
+                            class="White">Dread Thicket</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Collectez 7 <span class="Green">Fireflies</span> autour de <span class="White">Dread
+                            Thicket</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Bridge Encampment</span> et parlez à <span
+                            class="pnj">Eramir</span> pour recevoir les deux <span class="Green">Books of Skill</span>
+                        en récompense.
+                    </label>
+                </li>
+                <li data-act="7" data-step="26">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        (Optionnel) : Parlez à <span class="pnj">Helena</span> pour recevoir le <span
+                            class="Green">Greust’s Necklace</span>. Cette quête ne récompense qu'une amulette mais ne
+                        prend généralement qu'une minute, c'est donc votre choix de la faire ou non lors d'un départ de
+                        ligue. Si vous rencontrez l'<span class="White">Azmeri Shrine</span> dans <span
+                            class="White">Northern Forest</span>, placez le collier là et parlez à <span
+                            class="pnj">Helena</span> lorsque vous êtes en ville pour rendre d'autres quêtes.
+                    </label>
+                </li>
+                <li data-act="7" data-step="27">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Northern Forest</span> via le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="28">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez la sortie vers <span class="White">The Causeway</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="29">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span> lorsque vous le rencontrez.
+                    </label>
+                </li>
+                <li data-act="7" data-step="30">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Acquérez <span class="Green">Kishara’s Star</span> avant de quitter la zone, généralement trouvé
+                        juste à côté de la sortie de la zone dans la <span class="Green">Kishara’s Lockbox</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="31">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Vaal City</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="32">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez <span class="pnj">Yeena</span>. <span class="White">Vaal City</span> est une zone
+                        massive, tentaculaire et déroutante pour certains joueurs. Il y a toujours une partie de la zone
+                        qui est entourée de culs-de-sac et difficile à pénétrer (le "centre" de la ville, mais pas de la
+                        zone elle-même). <span class="pnj">Yeena</span> et le <span class="Blue">Waypoint</span> s'y
+                        trouvent toujours.
+                    </label>
+                </li>
+                <li data-act="7" data-step="33">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Reprenez le <span class="Blue">Waypoint</span> vers la ville et donnez la <span
+                            class="Green">Kishara’s Star</span> à <span class="pnj">Weylam</span> pour une récompense
+                        <span class="Green">Skill Book</span>, puis retournez à <span class="White">Vaal City</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="34">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Yeena</span> et entrez dans <span class="White">Temple of Decay
+                            (Level One)</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="35">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Temple of Decay (Level Two)</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="36">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Arakaali’s Web</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="37">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Arakaali</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="38">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Sarn Ramparts</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="39">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Sarn Encampment</span>.
+                    </label>
+                </li>
+                <li data-act="7" data-step="40">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        *C'est ici que nous vous recommandons de faire le Second Labyrinthe.*
+                    </label>
+                </li>
+            </ol>
+        </div>
+
+        <div id="act-8-content" class="act-content">
+            <h2>Acte VIII</h2>
+            <ol>
+                <li data-act="8" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Toxic Conduits</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez et entrez dans <span class="White">Doedre’s Cesspool</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Ouvrez la grille et entrez dans <span class="White">The Cauldron</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Doedre the Vile</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Sortez par <span class="White">Sewer Outlet</span> et obtenez le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le chemin de droite et entrez dans <span class="White">The Quay</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Ouvrez le <span class="Green">Sealed Casket</span> et prenez l'<span class="Green">Ankh of
+                            Eternity</span>. L'<span class="Green">Ankh</span> se trouve généralement près de l'entrée
+                        de la zone ; cherchez un long pont.
+                    </label>
+                </li>
+                <li data-act="8" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez et entrez dans <span class="White">Ressurection Site</span> et tuez <span
+                            class="Red">Tolman</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Clarissa</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">The Quay</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Grain Gate</span> et obtenez le <span
+                            class="Blue">Waypoint</span>. Dirigez-vous "vers le haut" à travers la zone, en suivant
+                        approximativement le mur supérieur droit de la zone.
+                    </label>
+                </li>
+                <li data-act="8" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez les <span class="Red">Gemling Legionnaires</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Imperial Fields</span> et suivez la route principale pour
+                        trouver le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Sarn Encampment</span>. Parlez à <span
+                            class="pnj">Clarissa</span> et <span class="pnj">Maramoa</span> pour les récompenses <span
+                            class="Green">Book of Skill</span>. Parlez à <span class="pnj">Hargan</span> pour la
+                        récompense d'anneau.
+                    </label>
+                </li>
+                <li data-act="8" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Imperial Fields</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Solaris Temple (Level One)</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Acquérez le <span class="Blue">Waypoint</span> si vous le croisez.
+                    </label>
+                </li>
+                <li data-act="8" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Solaris Temple (Level Two)</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Dawn</span> et prenez l'<span class="Green">Sun Orb</span>.
+                        Déconnectez-vous ou utilisez un portail pour retourner en ville.
+                    </label>
+                </li>
+                <li data-act="8" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez au <span class="White">Solaris Temple (Level one)</span> via <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez et entrez dans <span class="White">The Solaris Concourse</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez la zone, acquérez le <span class="Blue">Waypoint</span> et entrez dans <span
+                            class="White">The Harbour Bridge</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez la zone et entrez dans <span class="White">The Lunaris Concourse</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Acquérez le <span class="Blue">Waypoint</span> et entrez dans <span class="White">The Bath
+                            House</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Labyrinth trial</span> et complétez-le.
+                    </label>
+                </li>
+                <li data-act-8="8" data-step="26">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">High Gardens</span> et avancez jusqu'à ce que vous rencontriez
+                        les <span class="White">Pools of Terror</span>. Entrez et abattez <span
+                            class="Red">Yugul</span>. Déconnectez-vous ou utilisez un portail pour retourner en ville.
+                    </label>
+                </li>
+                <li data-act="8" data-step="27">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Hargan</span> pour la récompense <span class="Green">Skill
+                            Book</span>. Retournez à <span class="White">Lunaris Concourse</span> via <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="28">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Lunaris Temple (Level 1)</span>. Le chemin vers <span
+                            class="White">Lunaris Temple</span> est le même que dans l'Acte III, toujours en allant vers
+                        le haut jusqu'à ce que vous le rencontriez.
+                    </label>
+                </li>
+                <li data-act="8" data-step="29">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Acquérez le <span class="Blue">Waypoint</span>, puis entrez dans <span class="White">Lunaris
+                            Temple (Level 2)</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="30">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Dusk</span> et prenez l'<span class="Green">Moon Orb</span>, puis
+                        déconnectez-vous ou utilisez un portail pour retourner en ville.
+                    </label>
+                </li>
+                <li data-act="8" data-step="31">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Lunaris Concourse</span> via <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="32">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Harbour Bridge</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="33">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Sky Shrine</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="34">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Solaris</span> et <span class="Red">Lunaris</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="35">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Blood Aqueducts</span>.
+                    </label>
+                </li>
+                <li data-act="8" data-step="36">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Highgate</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
+
+        <div id="act-9-content" class="act-content">
+            <h2>Acte IX</h2>
+            <ol>
+                <li data-act="9" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Descent</span> et dirigez-vous vers la droite.
+                    </label>
+                </li>
+                <li data-act="9" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Descendez via les <span class="White">Supply Hoists</span> jusqu'à ce que vous trouviez la
+                        sortie vers <span class="White">Vastiri Desert</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez et obtenez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Localisez le <span class="Green">Storm Weathered Chest</span>. Battez les vagues de momies qui
+                        vous tendent une embuscade, puis prenez la <span class="Green">Storm Blade</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez en ville via un <span class="Green">Portal Scroll</span> et parlez à <span
+                            class="pnj">Petarus and Vanja</span>. Parlez à <span class="pnj">Sin</span>, puis parlez à
+                        nouveau à <span class="pnj">Petarus and Vanja</span>, prenez la <span class="Green">Bottled
+                            Storm</span>. Utilisez votre portail pour retourner à <span class="White">Vastiri
+                            Desert</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez l'entrée de <span class="White">The Oasis</span>, qui sera maintenant accessible en
+                        utilisant la <span class="Green">Bottled Storm</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Traversez la zone et entrez dans <span class="White">Sand Pit</span>. Tuez <span
+                            class="Red">Shakari</span> et déconnectez-vous ou utilisez un portail pour retourner en
+                        ville.
+                    </label>
+                </li>
+                <li data-act="9" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Irasha</span> pour la récompense <span class="Green">Skill
+                            book</span>. Retournez à <span class="White">Vastiri Desert</span> via <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Foothills</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="Blue">Waypoint</span>, généralement situé dans la partie supérieure
+                        droite de la zone.
+                    </label>
+                </li>
+                <li data-act="9" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Boiling Lake</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez le <span class="Red">Basilisk</span> et prenez le <span class="Green">Basilisk Acid</span>.
+                        Vous savez que vous êtes dans la zone où se trouve le <span class="Red">Basilisk</span> une fois
+                        que vous commencez à voir des groupes d'ennemis pétrifiés.
+                    </label>
+                </li>
+                <li data-act="9" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Déconnectez-vous ou utilisez un portail pour retourner en ville et reprenez le <span
+                            class="Blue">Waypoint</span> vers <span class="White">The Foothills</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Tunnel</span>, généralement trouvé dans la partie supérieure
+                        ou supérieure gauche de la zone.
+                    </label>
+                </li>
+                <li data-act="9" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Acquérez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Labyrinth Trial</span> et complétez-le.
+                    </label>
+                </li>
+                <li data-act="9" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Quarry</span>. Courez directement au milieu de la zone et
+                        acquérez le <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        *Ces étapes peuvent être complétées dans l'ordre de votre choix, selon ce que vous rencontrez en
+                        premier.*
+                    </label>
+                </li>
+                <li data-act="9" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Refinery</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        (Optionnel) : Si vous avez besoin de l'artisanat <span class="Green">Trigger a Socketed Spell
+                            when you Use a Skill</span>, cherchez cette grille, elle vous mènera sous terre dans la zone
+                        avec l'artisanat.
+                    </label>
+                </li>
+                <li data-act="9" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Explorez la zone jusqu'à ce que vous trouviez <span class="Red">General Adus</span>, puis
+                        tuez-le. Il se trouve dans sa propre petite arène, généralement dans la partie supérieure ou
+                        supérieure gauche de la zone. Habituellement, il est trouvé plus rapidement si vous prenez le
+                        chemin de gauche au début de la zone. Interagissez avec la <span class="Green">Theurgic
+                            Precipitate Machine</span> et prenez la <span class="Green">Trarthan Powder</span>. Utilisez
+                        un portail ou déconnectez-vous, puis retournez à <span class="White">The Quarry</span> via <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Shrine of the Winds</span> et abattez <span
+                            class="Red">Garukhan</span>. Retournez en ville via Portal ou logout, puis parlez à <span
+                            class="pnj">Irasha</span> pour recevoir la récompense <span class="Green">Skill book</span>.
+                        Retournez à <span class="White">The Quarry</span> via <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Sin</span> et entrez dans <span class="White">Belly of the
+                            Beast</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="24">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Rotting Core</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="9" data-step="25">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Black Core</span> et parlez à <span class="pnj">Sin</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="26">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans chacun des portails dans l'ordre de votre choix et battez les gardiens de <span
+                            class="Red">Malachai</span> (<span class="Red">Shavronne</span>, <span
+                            class="Red">Maligaro</span> et <span class="Red">Doedre</span>).
+                    </label>
+                </li>
+                <li data-act="9" data-step="27">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Black Heart</span> et tuez <span class="Red">the Depraved
+                            Trinity</span>.
+                    </label>
+                </li>
+                <li data-act="9" data-step="28">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Lilly Roth</span> et naviguez vers <span class="White">Oriath</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
+
+        <div id="act-10-content" class="act-content">
+            <h2>Acte X</h2>
+            <ol>
+                <li data-act="10" data-step="1">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Cathedral Rooftop</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="2">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Cathedral Apex</span>, immédiatement à gauche en entrant dans la
+                        zone du toit.
+                    </label>
+                </li>
+                <li data-act="10" data-step="3">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez les <span class="Red">Cultists</span> et les <span class="Red">Gargoyles</span> pour
+                        libérer <span class="pnj">Bannon</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="4">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Cathedral Rooftop</span> et dirigez-vous vers la droite.
+                    </label>
+                </li>
+                <li data-act="10" data-step="5">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Ravaged Square</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="6">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Dirigez-vous vers le bas et la droite jusqu'à ce que vous trouviez l'entrée de <span
+                            class="White">Control Blocks</span> et entrez-y.
+                    </label>
+                </li>
+                <li data-act="10" data-step="7">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Obtenez le <span class="Blue">Waypoint</span>, puis trouvez <span class="Red">Vilenta</span>,
+                        située à peu près là où se trouvait le <span class="Green">Miasmeter</span> dans l'Acte V. Tuez
+                        <span class="Red">Vilenta</span> et déconnectez-vous ou utilisez un portail pour retourner en
+                        ville.
+                    </label>
+                </li>
+                <li data-act="10" data-step="8">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Lani</span> pour recevoir la récompense <span class="Green">Book of
+                            Skill</span> et prenez le <span class="Blue">Waypoint</span> vers <span
+                            class="White">Control Blocks</span> puis sortez vers <span class="White">Ravaged
+                            Square</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="9">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Head upwards until you encounter the Waypoint, and acquire it, and enter <span
+                            class="White">Ossuary</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="10">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Trouvez le <span class="White">Labyrinth trial</span> et complétez-le (il est proche du <span
+                            class="Blue">Waypoint</span>), puis déconnectez-vous ou utilisez un portail pour retourner
+                        en ville. (Optionnel) : l'<span class="Green">Elixir of Allure</span> (qui récompense des points
+                        de Réinitialisation des passifs) est également proche du <span class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="11">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Prenez le <span class="Blue">Waypoint</span> vers <span class="White">Ravaged Square</span>,
+                        trouvez et entrez dans les <span class="White">Torched Courts</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="10" data-step="12">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">Desecrated Chambers</span>, qui a une disposition similaire aux
+                        <span class="White">Chambers of Innocence</span> de l'Acte V. Obtenez le <span
+                            class="Blue">Waypoint</span> immédiatement.
+                    </label>
+                </li>
+                <li data-act="10" data-step="13">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Find and kill <span class="Red">Avarius, Reassembled</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="14">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez aux <span class="White">Oriath Docks</span> en utilisant le <span
+                            class="Blue">Waypoint</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="15">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Bannon</span>, puis parlez à <span class="pnj">Lani</span> pour
+                        recevoir les récompenses de Flasques et d'Armure.
+                    </label>
+                </li>
+                <li data-act="10" data-step="16">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        *C'est ici que nous vous recommandons de faire le troisième Labyrinthe, afin qu'il soit terminé
+                        avant d'être à nouveau affligé par l'Affliction de Kitava. Assurez-vous d'être à 30% au-dessus
+                        de vos limites de résistance élémentaire pour éviter les problèmes après la mort imminente de
+                        Kitava.*
+                    </label>
+                </li>
+                <li data-act="10" data-step="17">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Innocence</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="18">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Retournez à <span class="White">Ravaged Square</span> et dirigez-vous vers le haut jusqu'à ce
+                        que vous trouviez <span class="pnj">Innocence</span>. Parlez-lui.
+                    </label>
+                </li>
+                <li data-act="10" data-step="19">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans les <span class="White">Canals</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="10" data-step="20">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Entrez dans <span class="White">The Feeding Trough</span> et traversez la zone.
+                    </label>
+                </li>
+                <li data-act="10" data-step="21">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Sin</span> et entrez dans l'<span class="White">Altar of
+                            Hunger</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="22">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Tuez <span class="Red">Kitava</span>.
+                    </label>
+                </li>
+                <li data-act="10" data-step="23">
+                    <label>
+                        <input type="checkbox" class="step-checkbox">
+                        Parlez à <span class="pnj">Lani</span> à <span class="White">Oriath</span> pour recevoir la
+                        récompense <span class="Green">Skill book</span>.
+                    </label>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+
+    <script src="./script.js"></script>
 </body>
 
 </html>
